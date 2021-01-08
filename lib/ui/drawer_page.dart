@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'add_category_page.dart';
+import 'add_process_page.dart';
+import 'appbar_widget.dart';
+import 'settings_page.dart';
 
 class DrawerPage extends StatefulWidget {
   @override
@@ -14,7 +18,6 @@ class DrawerPageState extends State<DrawerPage> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-
       child: Column(
         children: <Widget>[
           UserAccountsDrawerHeader(
@@ -23,8 +26,10 @@ class DrawerPageState extends State<DrawerPage> {
             accountEmail: Text(_userMail),
             //KULLANICI GİRİŞİNDEN ALINAN _userMail VERİSİ
             currentAccountPicture:
-                Image.asset("assets/images/wallet_tecno.png"),
-
+            Image.asset("assets/images/wallet_tecno.png"),
+            decoration: BoxDecoration(
+              color: Colors.indigo,
+            ),
           ),
           Expanded(
             child: ListView(
@@ -47,6 +52,28 @@ class DrawerPageState extends State<DrawerPage> {
                 ListTile(
                   leading: CircleAvatar(
                     child: Icon(
+                      Icons.category_outlined,
+                      color: Colors.indigo,
+                    ),
+                    backgroundColor: Colors.white,
+                  ),
+                  title: Text("Kategori Ekle "),
+                  trailing: Icon(
+                    Icons.chevron_right,
+                    color: Colors.indigo,
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AddCategoryPage(),
+                      ),
+                    );
+                  },
+                ),
+                ListTile(
+                  leading: CircleAvatar(
+                    child: Icon(
                       Icons.monetization_on_outlined,
                       color: Colors.indigo,
                     ),
@@ -62,6 +89,28 @@ class DrawerPageState extends State<DrawerPage> {
                 ListTile(
                   leading: CircleAvatar(
                     child: Icon(
+                      Icons.monetization_on_outlined,
+                      color: Colors.indigo,
+                    ),
+                    backgroundColor: Colors.white,
+                  ),
+                  title: Text("Gelir Ekle"),
+                  trailing: Icon(
+                    Icons.chevron_right,
+                    color: Colors.indigo,
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AddProcessPage(),
+                      ),
+                    );
+                  },
+                ),
+                ListTile(
+                  leading: CircleAvatar(
+                    child: Icon(
                       Icons.money_off_outlined,
                       color: Colors.indigo,
                     ),
@@ -73,6 +122,28 @@ class DrawerPageState extends State<DrawerPage> {
                     color: Colors.indigo,
                   ),
                   onTap: () {},
+                ),
+                ListTile(
+                  leading: CircleAvatar(
+                    child: Icon(
+                      Icons.money_off_outlined,
+                      color: Colors.indigo,
+                    ),
+                    backgroundColor: Colors.white,
+                  ),
+                  title: Text("Gider Ekle "),
+                  trailing: Icon(
+                    Icons.chevron_right,
+                    color: Colors.indigo,
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AddProcessPage(),
+                      ),
+                    );
+                  },
                 ),
                 Divider(
                   color: Colors.indigo,
@@ -92,17 +163,20 @@ class DrawerPageState extends State<DrawerPage> {
                     Icons.chevron_right,
                     color: Colors.indigo,
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SettingsPage(),
+                      ),
+                    );
+                  },
                 ),
-
-
               ],
             ),
           ),
-
         ],
       ),
     );
   }
 }
-
