@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:wepurseapp/ui/appbar_widget.dart';
+import 'appbar_widget.dart';
 import 'my_home_page.dart';
 
-class CreateAccountPage extends StatefulWidget {
+class CreateUserPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return CreateAccountPageState();
+    return CreateUserPageState();
   }
 }
 
-class CreateAccountPageState extends State<CreateAccountPage> {
+class CreateUserPageState extends State<CreateUserPage> {
   String _userName, _userMail;
   bool autoControl = false;
 
@@ -20,15 +20,15 @@ class CreateAccountPageState extends State<CreateAccountPage> {
     return Material(
       child: Theme(
         data: Theme.of(context).copyWith(
-          primaryColor: Colors.pink.shade200,
+          primaryColor: Colors.indigo,
           hintColor: Colors.black54,
-          accentColor: Colors.pink,
-          cursorColor: Colors.pink,
+          accentColor: Colors.indigo,
+          cursorColor: Colors.indigo,
           errorColor: Colors.red,
+
         ),
         child: Scaffold(
-          appBar: AppBarWidget(),
-          backgroundColor: Colors.white,
+          appBar: AppBarWidget.withTitle("Kullanıcı Oluştur"),
           body: Padding(
             padding: EdgeInsets.all(20),
             child: Form(
@@ -38,10 +38,14 @@ class CreateAccountPageState extends State<CreateAccountPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   TextFormField(
+                    textInputAction: TextInputAction.next,
                     decoration: InputDecoration(
                       labelText: "Kullanıcı Adı ",
                       hintText: "Kullanıcı adınızı giriniz.",
-                      prefixIcon: Icon(Icons.account_circle_outlined),
+                      prefixIcon: Icon(
+                        Icons.account_circle_outlined,
+                        color: Colors.indigo,
+                      ),
                       border: OutlineInputBorder(),
                     ),
                     validator: _inputNameControl,
@@ -54,8 +58,11 @@ class CreateAccountPageState extends State<CreateAccountPage> {
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
                       labelText: "E-posta",
-                      hintText: "Gecerli bir e-posta giriniz.",
-                      prefixIcon: Icon(Icons.email_outlined),
+                      hintText: "Geçerli bir e-posta giriniz.",
+                      prefixIcon: Icon(
+                        Icons.email_outlined,
+                        color: Colors.indigo,
+                      ),
                       border: OutlineInputBorder(),
                     ),
                     validator: _inputMailControl,
@@ -66,10 +73,12 @@ class CreateAccountPageState extends State<CreateAccountPage> {
                   ),
                   RaisedButton(
                     child: Text(
-                      "kaydet",
+                      "Kaydet",
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
                     ),
-                    color: Colors.pink.shade200,
-                    disabledColor: Colors.pinkAccent,
+                    color: Colors.indigo,
                     onPressed: () {
                       _inputDataControl();
                       if (_userName != null && _userMail != null) {
