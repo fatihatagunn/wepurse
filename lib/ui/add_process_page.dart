@@ -19,14 +19,15 @@ class AddProcessPageState extends State<AddProcessPage> {
   Widget build(BuildContext context) {
     return Material(
       child: Scaffold(
-        appBar: AppBarWidget(),
+        appBar: AppBarWidget.withTitle("İşlem Ekle/Düzenle"),
         backgroundColor: Colors.white,
         floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.white,
           child: Icon(
             Icons.done_outline_outlined,
-            size: 24,
+            size: 37,
+            color: Colors.indigo,
           ),
-          onPressed: (){},
         ),
         body: Padding(
           padding: const EdgeInsets.all(10.0),
