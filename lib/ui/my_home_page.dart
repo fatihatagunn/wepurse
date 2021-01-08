@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'add_process_page.dart';
 import 'appbar_widget.dart';
@@ -14,7 +15,6 @@ class MyHomePage extends StatefulWidget {
 class MyHomePageState extends State<MyHomePage> {
   var _income = 1200.0;
   var _amount = 8000.0;
-
   var _expense = 600.0;
 
   @override
@@ -38,9 +38,14 @@ class MyHomePageState extends State<MyHomePage> {
                 ),
               );
             },
-            backgroundColor: Colors.pinkAccent.shade200,
-            child: Icon(Icons.add, size: 37,),
+            //backgroundColor: Colors.pinkAccent.shade200,
+            child: Icon(
+              Icons.edit_outlined,
+              size: 37,
+              color: Colors.indigo,
+            ),
             elevation: 10,
+            backgroundColor: Colors.white,
           ),
         ),
         body: Padding(
@@ -52,7 +57,7 @@ class MyHomePageState extends State<MyHomePage> {
                   width: double.infinity,
                   height: MediaQuery.of(context).size.height / 3,
                   decoration: BoxDecoration(
-                    //color: Colors.purpleAccent,
+                    //color: Colors.indigo,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Row(
@@ -61,7 +66,7 @@ class MyHomePageState extends State<MyHomePage> {
                         child: Container(
                           margin: EdgeInsets.all(5),
                           decoration: BoxDecoration(
-                            color: Colors.pinkAccent.withOpacity(0.5),
+                            color: Colors.indigo,
                             borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(10),
                               bottomRight: Radius.circular(10),
@@ -70,14 +75,18 @@ class MyHomePageState extends State<MyHomePage> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: <Widget>[
-                              Text("Gelir"),
-                              Text(_income.toString()),
+                              Text(
+                                "Gelir :",
+                              ),
+                              Text(
+                                _income.toString(),
+                              ),
                             ],
                           ),
                         ),
                       ),
                       VerticalDivider(
-                        color: Colors.pink,
+                        color: Colors.black,
                         indent: 30,
                         endIndent: 30,
                       ),
@@ -85,12 +94,14 @@ class MyHomePageState extends State<MyHomePage> {
                         child: Container(
                           margin: EdgeInsets.all(5),
                           decoration: BoxDecoration(
-                              color: Colors.purpleAccent.withOpacity(0.5),
+                              color: Colors.indigoAccent,
                               borderRadius: BorderRadius.circular(10)),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: <Widget>[
-                              Text("Bakiye"),
+                              Text(
+                                "Bakiye :",
+                              ),
                               Text(
                                 _amount.toString(),
                               ),
@@ -99,7 +110,7 @@ class MyHomePageState extends State<MyHomePage> {
                         ),
                       ),
                       VerticalDivider(
-                        color: Colors.pink,
+                        color: Colors.black,
                         indent: 30,
                         endIndent: 30,
                       ),
@@ -107,7 +118,7 @@ class MyHomePageState extends State<MyHomePage> {
                         child: Container(
                           margin: EdgeInsets.all(5),
                           decoration: BoxDecoration(
-                            color: Colors.pinkAccent.withOpacity(0.5),
+                            color: Colors.indigo,
                             borderRadius: BorderRadius.only(
                               topRight: Radius.circular(10),
                               bottomLeft: Radius.circular(10),
@@ -117,7 +128,7 @@ class MyHomePageState extends State<MyHomePage> {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: <Widget>[
                               Text(
-                                "Gider",
+                                "Gider :",
                               ),
                               Text(
                                 _expense.toString(),
@@ -135,18 +146,40 @@ class MyHomePageState extends State<MyHomePage> {
                 height: 5,
               ),
               Divider(
-                color: Colors.pink,
+                color: Colors.black,
                 indent: 20,
                 endIndent: 20,
               ),
               Expanded(
                 child: Container(
                   width: double.infinity,
+                  height: MediaQuery.of(context).size.height / 10,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.indigoAccent,
+                  ),
+                  padding: EdgeInsets.all(10),
+                  child: RaisedButton(
+                    child: Text("Tarih Seçimi"),
+                    onPressed: () {},
+                  ),
+                ),
+                flex: 1,
+              ),
+              SizedBox(height: 2,),
+              Expanded(
+                child: Container(
+                  width: double.infinity,
                   height: MediaQuery.of(context).size.height / 3,
-                  color: Colors.indigo,
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Text("wepurse app"),
+                  decoration: BoxDecoration(
+                    color: Colors.indigoAccent,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      topRight: Radius.circular(10),
+                    ),
+                  ),
+                  child: ListView(
+
                   ),
                 ),
                 flex: 4,
