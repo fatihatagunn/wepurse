@@ -25,9 +25,9 @@ class CreateUserPageState extends State<CreateUserPage> {
           accentColor: Colors.indigo,
           cursorColor: Colors.indigo,
           errorColor: Colors.red,
-
         ),
         child: Scaffold(
+          resizeToAvoidBottomPadding: false,
           appBar: AppBarWidget.withTitle("Kullanıcı Oluştur"),
           body: Padding(
             padding: EdgeInsets.all(20),
