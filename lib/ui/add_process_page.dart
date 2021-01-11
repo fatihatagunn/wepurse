@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:wepurseapp/ui/my_home_page.dart';
 import 'appbar_widget.dart';
 
 class AddProcessPage extends StatefulWidget {
@@ -15,12 +17,16 @@ class AddProcessPageState extends State<AddProcessPage> {
 
   int maxLine = 1;
 
-  var value;
+  String value;
   String process = "";
 
   String chosenCategory = "Market";
 
-  List<String> categories = ["Ulaşım", "Market", "Giyim"];
+  List<String> categories = ["Ulaşım", "Market", "Giyim", "Su Faturası"];
+
+  String chosenAccount = "Nakit";
+
+  List<String> accounts = ["Nakit", "Maaş Hesabı", "Kredi Kartı"];
 
   @override
   void initState() {
@@ -47,127 +53,245 @@ class AddProcessPageState extends State<AddProcessPage> {
   Widget build(BuildContext context) {
     return Material(
       child: Scaffold(
+        resizeToAvoidBottomPadding: false,
         appBar: AppBarWidget.withTitle("İşlem Ekle/Düzenle"),
-        body: SingleChildScrollView(
-          child: Container(
-            width: double.infinity,
-            height: MediaQuery.of(context).size.height,
-            child: Column(
-              children: <Widget>[
-                Expanded(
-                  child: Container(
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: Container(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text("Kategori Seçimi "),
-                                DropdownButton<String>(
-                                  items: categories.map((chosenCategory) {
-                                    return DropdownMenuItem<String>(
-                                      child: Text(chosenCategory),
-                                      value: chosenCategory,
-                                    );
-                                  }).toList(),
-                                  onChanged: (chosenData) {
-                                    setState(() {
-                                      chosenCategory = chosenData;
-                                    });
-                                  },
+        body: Padding(
+          padding: EdgeInsets.all(10),
+          child: Column(
+            children: <Widget>[
+              Container(
+                width: double.infinity,
+                height: MediaQuery.of(context).size.height / 3,
+                decoration: BoxDecoration(
+                  color: Colors.indigo,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Container(
+                        margin: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          bottomRight: Radius.circular(10),
+                        )),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              "Kategori Seçimi ",
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.white,
+                              ),
+                            ),
+                            DropdownButton<String>(
+                              iconEnabledColor: Colors.white,
+                              dropdownColor: Colors.indigo,
+                              items: categories.map((chosenCategory) {
+                                return DropdownMenuItem<String>(
+                                  child: Text(
+                                    chosenCategory,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  ),
                                   value: chosenCategory,
-                                ),
-                              ],
+                                );
+                              }).toList(),
+                              onChanged: (chosenData) {
+                                setState(() {
+                                  chosenCategory = chosenData;
+                                });
+                              },
+                              value: chosenCategory,
                             ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Container(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text("İşlem Seçimi"),
-                                RadioListTile<String>(
-                                  value: "Gelir",
-                                  groupValue: process,
-                                  onChanged: (data) {
-                                    setState(() {
-                                      process = data;
-                                    });
-                                  },
-                                  title: Text("Gelir"),
-                                ),
-                                RadioListTile<String>(
-                                  value: "Gider",
-                                  groupValue: process,
-                                  onChanged: (data) {
-                                    setState(() {
-                                      process = data;
-                                    });
-                                  },
-                                  title: Text("Gider"),
-                                ),
-                              ],
+                            SizedBox(
+                              height: 2,
                             ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  flex: 2,
-                ),
-                Expanded(
-                  child: Container(
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 70, left: 30),
-                      child: TextFormField(
-                        //onFieldSubmitted: ,
-
-                        maxLines: 1,
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          labelText: "İşlem Tutarını Giriniz",
-                          prefixIcon: Icon(Icons.monetization_on_outlined),
-                          border: OutlineInputBorder(),
+                            Text(
+                              "Hesap Seçimi",
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.white,
+                              ),
+                            ),
+                            DropdownButton<String>(
+                              iconEnabledColor: Colors.white,
+                              dropdownColor: Colors.indigo,
+                              items: accounts.map((chosenAccount) {
+                                return DropdownMenuItem<String>(
+                                  child: Text(
+                                    chosenAccount,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  value: chosenAccount,
+                                );
+                              }).toList(),
+                              onChanged: (chosenData) {
+                                setState(() {
+                                  chosenAccount = chosenData;
+                                });
+                              },
+                              value: chosenAccount,
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                  ),
-                  flex: 1,
-                ),
-                Expanded(
-                  child: Container(
-                    padding: EdgeInsets.all(10),
-                    width: double.infinity,
-                    child: RaisedButton(
-                      child: Text("Tarih Seçiniz"),
-                      onPressed: () {},
+                    VerticalDivider(
+                      color: Colors.black,
+                      indent: 30,
+                      endIndent: 30,
                     ),
-                  ),
-                  flex: 1,
-                ),
-                Expanded(
-                  child: Container(
-                    child: Padding(
-                      padding:
-                          const EdgeInsets.only(top: 20, right: 70, left: 30),
-                      child: TextFormField(
-                        autofocus: false,
-                        focusNode: _focusNode,
-                        maxLines: maxLine,
-                        decoration: InputDecoration(
-                          labelText: "Açıklama Giriniz.",
-                          prefixIcon: Icon(Icons.info_outline),
-                          border: OutlineInputBorder(),
+                    Expanded(
+                      child: Container(
+                        margin: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(10),
+                            bottomLeft: Radius.circular(10),
+                          ),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              "İşlem Seçimi",
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.white,
+                              ),
+                            ),
+                            RadioListTile<String>(
+                              activeColor: Colors.white,
+                              value: "Gelir",
+                              groupValue: process,
+                              onChanged: (value) {
+                                setState(() {
+                                  process = value;
+                                });
+                              },
+                              title: Text(
+                                "Gelir",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                            RadioListTile<String>(
+                              activeColor: Colors.white,
+                              value: "Gider",
+                              groupValue: process,
+                              onChanged: (value) {
+                                setState(() {
+                                  process = value;
+                                });
+                              },
+                              title: Text(
+                                "Gider",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                  ),
-                  flex: 1,
+                  ],
                 ),
-              ],
-            ),
+              ),
+              Container(
+                margin: EdgeInsets.only(
+                  top: 5,
+                ),
+                padding: EdgeInsets.only(
+                  left: 10,
+                  top: 5,
+                  right: 20,
+                  bottom: 5,
+                ),
+                width: double.infinity,
+                height: MediaQuery.of(context).size.height / 10,
+                decoration: BoxDecoration(
+                  color: Colors.indigo,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: TextFormField(
+                  maxLines: 1,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    labelStyle: TextStyle(
+                      color: Colors.white,
+                    ),
+                    labelText: "İşlem Tutarını Giriniz",
+                    prefixIcon: Icon(
+                      Icons.monetization_on_outlined,
+                      color: Colors.white,
+                    ),
+                    border: OutlineInputBorder(),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(
+                  top: 5,
+                ),
+                padding: EdgeInsets.all(10),
+                width: double.infinity,
+                height: MediaQuery.of(context).size.height / 10,
+                decoration: BoxDecoration(
+                  color: Colors.indigo,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: RaisedButton(
+                  child: Text("Tarih Seçiniz"),
+                  onPressed: () {},
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(
+                  top: 5,
+                ),
+                padding: EdgeInsets.all(10),
+                width: double.infinity,
+                height: MediaQuery.of(context).size.height / 10,
+                decoration: BoxDecoration(
+                  color: Colors.indigo,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: TextFormField(
+                  autofocus: false,
+                  focusNode: _focusNode,
+                  maxLines: maxLine,
+                  decoration: InputDecoration(
+                    labelStyle: TextStyle(
+                      color: Colors.white,
+                    ),
+                    labelText: "Açıklama Giriniz.",
+                    prefixIcon: Icon(
+                      Icons.info_outline,
+                      color: Colors.white,
+                    ),
+                    border: OutlineInputBorder(),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
         floatingActionButton: FloatingActionButton(
@@ -175,7 +299,16 @@ class AddProcessPageState extends State<AddProcessPage> {
           child: Icon(
             Icons.done_outline_outlined,
             color: Colors.indigo,
+            size: 37,
           ),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MyHomePage(),
+              ),
+            );
+          },
         ),
       ),
     );
