@@ -21,7 +21,7 @@ class SettingsPageState extends State<SettingsPage> {
             width: double.infinity,
             height: MediaQuery.of(context).size.height,
             decoration: BoxDecoration(
-              color: Colors.teal,
+              color: Colors.indigo,
               borderRadius: BorderRadiusDirectional.circular(10),
             ),
             child: Column(
@@ -29,7 +29,10 @@ class SettingsPageState extends State<SettingsPage> {
                 Expanded(
                   child: Container(
                     margin: EdgeInsets.all(10),
-                    color: Colors.red,
+                    decoration: BoxDecoration(
+                      color: Colors.indigoAccent,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                     width: double.maxFinite,
                     height: MediaQuery.of(context).size.height,
                     child: Column(
@@ -54,7 +57,10 @@ class SettingsPageState extends State<SettingsPage> {
                 Expanded(
                   child: Container(
                     margin: EdgeInsets.all(10),
-                    color: Colors.purple,
+                    decoration: BoxDecoration(
+                      color: Colors.indigoAccent,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
@@ -77,12 +83,17 @@ class SettingsPageState extends State<SettingsPage> {
                 Expanded(
                   child: Container(
                     margin: EdgeInsets.only(left: 20, right: 20, bottom: 10),
-                    color: Colors.green,
+
                     width: double.maxFinite,
                     height: MediaQuery.of(context).size.height,
+                    decoration: BoxDecoration(
+                      color: Colors.indigoAccent,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                     child: Align(
                       alignment: Alignment(0, 1),
                       child: RaisedButton(
+                        onPressed: (){},
                         child: Text("tüm verileri sil"),
                       ),
                     ),
