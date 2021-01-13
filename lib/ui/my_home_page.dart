@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:date_format/date_format.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'add_process_page.dart';
@@ -19,6 +20,10 @@ class MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    DateTime today = DateTime.now();
+    DateTime daysAgo = DateTime(2021, today.month, today.day - 3);
+    DateTime daysAfter = DateTime(2021, today.month, today.day + 3);
+
     return Material(
       child: Scaffold(
         drawer: DrawerPage(),
@@ -160,13 +165,26 @@ class MyHomePageState extends State<MyHomePage> {
                   ),
                   padding: EdgeInsets.all(10),
                   child: RaisedButton(
-                    child: Text("Tarih Seçimi"),
-                    onPressed: () {},
+                    onPressed: () {
+                      showDatePicker(
+                              context: context,
+                              initialDate: today,
+                              firstDate: daysAgo,
+                              lastDate: daysAfter)
+                          .then((chosenDate) {
+                        today = chosenDate;
+                      });
+                    },
+                    child: Text(
+                      formatDate(today, [dd, '-', mm, '-', yyyy]),
+                    ),
                   ),
                 ),
                 flex: 1,
               ),
-              SizedBox(height: 2,),
+              SizedBox(
+                height: 2,
+              ),
               Expanded(
                 child: Container(
                   width: double.infinity,
@@ -178,9 +196,7 @@ class MyHomePageState extends State<MyHomePage> {
                       topRight: Radius.circular(10),
                     ),
                   ),
-                  child: ListView(
-
-                  ),
+                  child: ListView(),
                 ),
                 flex: 4,
               ),
