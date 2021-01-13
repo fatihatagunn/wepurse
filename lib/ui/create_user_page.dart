@@ -73,7 +73,7 @@ class CreateUserPageState extends State<CreateUserPage> {
                   ),
                   RaisedButton(
                     child: Text(
-                      "Kaydet",
+                      "Kullanıcı Oluştur",
                       style: TextStyle(
                         color: Colors.white,
                       ),
