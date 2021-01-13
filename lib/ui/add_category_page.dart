@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'appbar_widget.dart';
+import 'my_home_page.dart';
 
 class AddCategoryPage extends StatefulWidget {
   @override
@@ -15,75 +17,105 @@ class AddCategoryPageState extends State<AddCategoryPage> {
   Widget build(BuildContext context) {
     return Material(
       child: Scaffold(
+        resizeToAvoidBottomPadding: false,
         appBar: AppBarWidget.withTitle("Kategori Ekle/Düzenle"),
         body: Padding(
-          padding: const EdgeInsets.all(12.0),
+          padding: EdgeInsets.all(5),
           child: Container(
+            width: double.infinity,
+            height: MediaQuery.of(context).size.height,
             decoration: BoxDecoration(
-              color: Colors.teal,
+              color: Colors.indigoAccent,
               borderRadius: BorderRadius.circular(10),
             ),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Expanded(
-                  child: Container(
-                    margin: EdgeInsets.all(10),
-                    color: Colors.teal,
-                    child: Align(
-                      child: TextField(
-                        decoration: InputDecoration(
-                          labelText: "Kategori Adı",
-                          icon: Icon(Icons.edit),
+                SizedBox(
+                  height: 20,
+                ),
+                Container(
+
+                  width: 150,
+                  height: 150,
+                  decoration: BoxDecoration(
+                    color: Colors.indigoAccent,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Column(
+                    children: <Widget>[
+                      Text(
+                        "İşlem Seçimi ",
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.white,
+                        ),
+                      ),
+                      RadioListTile<String>(
+                        activeColor: Colors.white,
+                        value: "Gelir",
+                        groupValue: process,
+                        onChanged: (value) {
+                          setState(() {
+                            process = value;
+                          });
+                        },
+                        title: Text(
+                          "Gelir",
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      RadioListTile<String>(
+                        activeColor: Colors.white,
+                        value: "Gider",
+                        groupValue: process,
+                        onChanged: (value) {
+                          setState(() {
+                            process = value;
+                          });
+                        },
+                        title: Text(
+                          "Gider",
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: TextFormField(
+                    maxLines: 1,
+                    maxLength: 20,
+                    maxLengthEnforced: true,
+                    decoration: InputDecoration(
+                      labelStyle: TextStyle(
+                        color: Colors.white,
+                      ),
+                      labelText: "Kategori Adını Giriniz",
+                      prefixIcon: Icon(
+                        Icons.category_outlined,
+                        color: Colors.white,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.white,
                         ),
                       ),
                     ),
                   ),
-                  flex: 2,
                 ),
-                Expanded(
-                  child: Container(
-                    child: Column(
-                      children: <Widget>[
-                        Text(
-                          "İşlem Tipini Seçiniz",
-                          style: TextStyle(fontSize: 20),
-                        ),
-                        RadioListTile(
-                          value: "Gelir",
-                          groupValue: process,
-                          onChanged: (value) {
-                            setState(() {
-                              process = value;
-                            });
-                          },
-                          title: Text("Gelir"),
-                        ),
-                        RadioListTile(
-                          value: "Gelir",
-                          groupValue: process,
-                          onChanged: (value) {
-                            setState(() {
-                              process = value;
-                            });
-                          },
-                          title: Text("Gelir"),
-                        ),
-                      ],
-                    ),
-                  ),
-                  flex: 2,
-                ),
-                Expanded(
-                  child: Container(
-                    child: Text(
-                      "Kategori ikon seçimi yapılacak . "
-                          "DropDownMenuItem döndüren fonksiyon",
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  flex: 2,
-                ),
+
+                SizedBox( height: 10,),
+
+
+                Text("Kategori icon seçimi yapılacak"),
               ],
             ),
           ),
@@ -95,7 +127,14 @@ class AddCategoryPageState extends State<AddCategoryPage> {
             color: Colors.indigo,
             size: 37,
           ),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MyHomePage(),
+              ),
+            );
+          },
         ),
       ),
     );
