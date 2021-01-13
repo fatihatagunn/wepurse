@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'add_account_page.dart';
 import 'add_category_page.dart';
 import 'add_process_page.dart';
 import 'appbar_widget.dart';
@@ -67,6 +68,43 @@ class DrawerPageState extends State<DrawerPage> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => AddCategoryPage(),
+                      ),
+                    );
+                  },
+                ),
+                ListTile(
+                  leading: CircleAvatar(
+                    child: Icon(
+                      Icons.account_balance_wallet_outlined,
+                      color: Colors.indigo,
+                    ),
+                    backgroundColor: Colors.white,
+                  ),
+                  title: Text("Hesaplar"),
+                  trailing: Icon(
+                    Icons.chevron_right,
+                    color: Colors.indigo,
+                  ),
+                  onTap: () {},
+                ),
+                ListTile(
+                  leading: CircleAvatar(
+                    child: Icon(
+                      Icons.account_balance_wallet_outlined,
+                      color: Colors.indigo,
+                    ),
+                    backgroundColor: Colors.white,
+                  ),
+                  title: Text("Hesap Ekle "),
+                  trailing: Icon(
+                    Icons.chevron_right,
+                    color: Colors.indigo,
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AddAccountPage(),
                       ),
                     );
                   },
