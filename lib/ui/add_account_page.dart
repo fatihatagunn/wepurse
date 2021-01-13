@@ -32,7 +32,7 @@ class AddAccountPageState extends State<AddAccountPage> {
         body: Container(
           margin: EdgeInsets.all(10.0),
           decoration: BoxDecoration(
-            color: Colors.teal.shade200,
+            color: Colors.indigoAccent,
             borderRadius: BorderRadius.circular(10),
 
             //shape: BoxShape.circle,
@@ -43,21 +43,26 @@ class AddAccountPageState extends State<AddAccountPage> {
               Padding(
                 padding: const EdgeInsets.all(40.0),
                 child: TextField(
-                  //textAlign: TextAlign.center,
                   maxLength: 20,
                   maxLengthEnforced: true,
-                  onSubmitted: (String s) => debugPrint("On Submit: $s"),
                   focusNode: _focusNode,
-
                   decoration: InputDecoration(
-                    labelText: "Hesap Adı",
-                    hintText: "Hesap Adınızı Giriniz",
-                    icon: Icon(Icons.edit),
+                    labelText: "Hesap Adını Giriniz",
+                    labelStyle: TextStyle(
+                      color: Colors.white,
+                    ),
+                    icon: Icon(
+                      Icons.edit,
+                      color: Colors.white,
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
                 ),
               ),
-
-
             ],
           ),
         ),
@@ -65,9 +70,10 @@ class AddAccountPageState extends State<AddAccountPage> {
           child: Icon(
             Icons.done_outline_outlined,
             size: 30,
+            color: Colors.indigo,
           ),
-          backgroundColor: Colors.teal,
-          onPressed: (){},
+          backgroundColor: Colors.white,
+          onPressed: () {},
         ),
       ),
     );
