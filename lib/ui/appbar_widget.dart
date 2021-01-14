@@ -17,7 +17,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      elevation: 15,
+      elevation: 0,
       shadowColor: Colors.indigo,
       backgroundColor: Colors.indigo,
       iconTheme: IconThemeData(color: Colors.white),
