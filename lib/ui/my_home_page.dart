@@ -176,7 +176,7 @@ class MyHomePageState extends State<MyHomePage> {
                       });
                     },
                     child: Text(
-                      formatDate(today, [dd, '-', mm, '-', yyyy]),
+                      "Tarih Seçimi",
                     ),
                   ),
                 ),
