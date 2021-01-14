@@ -29,6 +29,10 @@ class AddProcessPageState extends State<AddProcessPage> {
 
   List<String> accounts = ["Nakit", "Maaş Hesabı", "Kredi Kartı"];
 
+  String chosenProcess = "Gelir" ;
+
+  List<String> processes = ["Gelir" , "Gider"] ;
+
   @override
   void initState() {
     super.initState();
@@ -187,6 +191,34 @@ class AddProcessPageState extends State<AddProcessPage> {
                       ),
                     ),
                   ],
+                ),
+
+                Container(
+                  width: 120,
+                  height: 90,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+
+                      Text("İşlem Seçimi") ,
+                      DropdownButton<String>(
+                        items: processes.map((chosenProcess) {
+                          return DropdownMenuItem<String>(
+                            child: Text(
+                              chosenProcess,
+                            ),
+                            value: chosenProcess,
+                          );
+                        }).toList(),
+                        onChanged: (chosenData) {
+                          setState(() {
+                            chosenProcess = chosenData;
+                          });
+                        },
+                        value: chosenProcess,
+                      ),
+                    ],
+                  ),
                 ),
                 RaisedButton(
                   onPressed: () {
