@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'add_account_page.dart';
 import 'appbar_widget.dart';
 
 class AccountsPage extends StatefulWidget {
@@ -18,6 +19,14 @@ class AccountsPageState extends State<AccountsPage> {
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.indigo,
           child: Icon(Icons.add_circle_outline , ),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AddAccountPage(),
+              ),
+            );
+          },
         ),
         body: Padding(
           padding: EdgeInsets.only(
