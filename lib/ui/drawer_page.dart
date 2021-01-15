@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'accounts_page.dart';
+import 'all_expenses_page.dart';
+import 'all_incomes_page.dart';
+import 'categories_page.dart';
 import 'add_account_page.dart';
 import 'add_category_page.dart';
 import 'add_process_page.dart';
@@ -27,7 +31,7 @@ class DrawerPageState extends State<DrawerPage> {
             accountEmail: Text(_userMail),
             //KULLANICI GİRİŞİNDEN ALINAN _userMail VERİSİ
             currentAccountPicture:
-            Image.asset("assets/images/wallet_tecno.png"),
+                Image.asset("assets/images/wallet_tecno.png"),
             decoration: BoxDecoration(
               color: Colors.indigo,
             ),
@@ -48,7 +52,14 @@ class DrawerPageState extends State<DrawerPage> {
                     Icons.chevron_right,
                     color: Colors.indigo,
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CategoriesPage(),
+                      ),
+                    );
+                  },
                 ),
                 ListTile(
                   leading: CircleAvatar(
@@ -85,7 +96,9 @@ class DrawerPageState extends State<DrawerPage> {
                     Icons.chevron_right,
                     color: Colors.indigo,
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => AccountsPage() ,) ,);
+                  },
                 ),
                 ListTile(
                   leading: CircleAvatar(
@@ -122,7 +135,14 @@ class DrawerPageState extends State<DrawerPage> {
                     Icons.chevron_right,
                     color: Colors.indigo,
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AllIncomesPage(),
+                      ),
+                    );
+                  },
                 ),
                 ListTile(
                   leading: CircleAvatar(
@@ -159,7 +179,14 @@ class DrawerPageState extends State<DrawerPage> {
                     Icons.chevron_right,
                     color: Colors.indigo,
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AllExpensesPage(),
+                      ),
+                    );
+                  },
                 ),
                 ListTile(
                   leading: CircleAvatar(
