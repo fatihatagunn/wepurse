@@ -14,91 +14,81 @@ class SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return Material(
       child: Scaffold(
+        backgroundColor: Colors.indigo,
         appBar: AppBarWidget.withTitle("Ayarlar"),
         body: Padding(
-          padding: const EdgeInsets.all(10.0),
+          padding: EdgeInsets.only(
+            right: 10,
+            left: 10,
+            top: 10,
+          ),
           child: Container(
             width: double.infinity,
             height: MediaQuery.of(context).size.height,
             decoration: BoxDecoration(
-              color: Colors.indigo,
-              borderRadius: BorderRadiusDirectional.circular(10),
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(10),
+                topRight: Radius.circular(10),
+              ),
             ),
             child: Column(
               children: <Widget>[
-                Expanded(
-                  child: Container(
-                    margin: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: Colors.indigoAccent,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    width: double.maxFinite,
-                    height: MediaQuery.of(context).size.height,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text(
-                          "KULLANICI ADI",
-                          style: TextStyle(fontSize: 30),
+                SizedBox(
+                  height: 30,
+                ),
+                Container(
+                  width: double.infinity,
+                  height: 150,
+
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        "Kullanıcı Adı",
+                        style: TextStyle(
+                          fontSize: 26,
+                          color: Colors.indigo ,
                         ),
-                        SizedBox(
-                          height: 15,
+                      ),
+                      Text(
+                        "E-posta",
+                        style: TextStyle(
+                          fontSize: 22,
+                          color: Colors.indigo ,
                         ),
-                        Text(
-                          "E-posta",
-                          style: TextStyle(fontSize: 24),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  flex: 3,
                 ),
                 Expanded(
                   child: Container(
-                    margin: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: Colors.indigoAccent,
-                      borderRadius: BorderRadius.circular(10),
+                    padding: EdgeInsets.only(
+                      right: 50,
+                      left: 50,
                     ),
+
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
                         RaisedButton(
-                          child: Text("Tema Seçimi"),
+                          child: Text(
+                            "Kullanıcı Bilgilerini Güncelle",
+                          ),
                           onPressed: () {},
-                        ),
-                        SizedBox(
-                          height: 15,
+                          color: Colors.orangeAccent,
                         ),
                         RaisedButton(
-                          child: Text("Profili Düzenle"),
+                          child: Text(
+                            "Tüm Verileri Sil",
+                          ),
                           onPressed: () {},
+                          color: Colors.red,
                         ),
                       ],
                     ),
                   ),
-                  flex: 4,
-                ),
-                Expanded(
-                  child: Container(
-                    margin: EdgeInsets.only(left: 20, right: 20, bottom: 10),
-
-                    width: double.maxFinite,
-                    height: MediaQuery.of(context).size.height,
-                    decoration: BoxDecoration(
-                      color: Colors.indigoAccent,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Align(
-                      alignment: Alignment(0, 1),
-                      child: RaisedButton(
-                        onPressed: (){},
-                        child: Text("tüm verileri sil"),
-                      ),
-                    ),
-                  ),
-                  flex: 1,
                 ),
               ],
             ),
