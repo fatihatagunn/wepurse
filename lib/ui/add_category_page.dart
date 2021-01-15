@@ -11,120 +11,29 @@ class AddCategoryPage extends StatefulWidget {
 }
 
 class AddCategoryPageState extends State<AddCategoryPage> {
-  String process = "";
+  String chosenProcess = "Gelir";
+
+  List<String> processes = ["Gelir", "Gider"];
+
+//  Icon chosenIcon = Icon(Icons.account_balance_wallet_outlined);
+
+ // List<Icon> icons = [
+   // Icon(Icons.icecream),
+    //Icon(Icons.account_balance_wallet_outlined)
+  //];
 
   @override
   Widget build(BuildContext context) {
     return Material(
       child: Scaffold(
+        backgroundColor: Colors.indigo,
         resizeToAvoidBottomPadding: false,
         appBar: AppBarWidget.withTitle("Kategori Ekle/Düzenle"),
-        body: Padding(
-          padding: EdgeInsets.all(5),
-          child: Container(
-            width: double.infinity,
-            height: MediaQuery.of(context).size.height,
-            decoration: BoxDecoration(
-              color: Colors.indigoAccent,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Column(
-
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                SizedBox(
-                  height: 20,
-                ),
-                Container(
-
-                  width: 150,
-                  height: 150,
-                  decoration: BoxDecoration(
-                    color: Colors.indigoAccent,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Column(
-                    children: <Widget>[
-                      Text(
-                        "İşlem Seçimi ",
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.white,
-                        ),
-                      ),
-                      RadioListTile<String>(
-                        activeColor: Colors.white,
-                        value: "Gelir",
-                        groupValue: process,
-                        onChanged: (value) {
-                          setState(() {
-                            process = value;
-                          });
-                        },
-                        title: Text(
-                          "Gelir",
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                      RadioListTile<String>(
-                        activeColor: Colors.white,
-                        value: "Gider",
-                        groupValue: process,
-                        onChanged: (value) {
-                          setState(() {
-                            process = value;
-                          });
-                        },
-                        title: Text(
-                          "Gider",
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: TextFormField(
-                    maxLines: 1,
-                    maxLength: 20,
-                    maxLengthEnforced: true,
-                    decoration: InputDecoration(
-                      labelStyle: TextStyle(
-                        color: Colors.white,
-                      ),
-                      labelText: "Kategori Adını Giriniz",
-                      prefixIcon: Icon(
-                        Icons.category_outlined,
-                        color: Colors.white,
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-
-                SizedBox( height: 10,),
-
-
-                Text("Kategori icon seçimi yapılacak"),
-              ],
-            ),
-          ),
-        ),
         floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.indigo,
           child: Icon(
             Icons.done_outline_outlined,
-            color: Colors.indigo,
+            color: Colors.white,
             size: 37,
           ),
           onPressed: () {
@@ -135,6 +44,90 @@ class AddCategoryPageState extends State<AddCategoryPage> {
               ),
             );
           },
+        ),
+        body: Padding(
+          padding: EdgeInsets.only(
+            left: 10,
+            top: 10,
+            right: 10,
+          ),
+          child: Container(
+            width: double.infinity,
+            height: MediaQuery.of(context).size.height,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(10),
+                topRight: Radius.circular(10),
+              ),
+            ),
+            child: Column(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(
+                    right: 20,
+                    left: 20,
+                    top: 8,
+                    bottom: 5,
+                  ),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      icon: Icon(
+                        Icons.category_outlined,
+                      ),
+                      labelText: "Kategori Adı",
+                      hintText: "Kategori Adını Giriniz",
+                    ),
+                  ),
+                ),
+                Row(
+                  children: <Widget>[
+                    Container(
+                      width: 150,
+                      height: 150,
+                      
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text("İşlem Seçimi"),
+                          DropdownButton<String>(
+                            items: processes.map((chosenProcess) {
+                              return DropdownMenuItem<String>(
+                                child: Text(
+                                  chosenProcess,
+                                ),
+                                value: chosenProcess,
+                              );
+                            }).toList(),
+                            onChanged: (chosenData) {
+                              setState(() {
+                                chosenProcess = chosenData;
+                              });
+                            },
+                            value: chosenProcess,
+                          ),
+                        ],
+                      ),
+                    ),
+                   /* DropdownButton<Icon>(
+                      items: icons.map((chosenIcon) {
+                        return DropdownMenuItem<Icon>(
+                          child: chosenIcon,
+                          value: chosenIcon,
+                        );
+                      }).toList(),
+                      onChanged: (inputData) {
+                        setState(() {
+                          chosenIcon = inputData;
+                        });
+                      },
+                      value: chosenIcon,
+                    ),*/
+                  ],
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
