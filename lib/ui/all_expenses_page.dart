@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'add_process_page.dart';
 import 'appbar_widget.dart';
+import 'my_home_page.dart';
 
 class AllExpensesPage extends StatefulWidget {
   @override
@@ -17,7 +19,17 @@ class AllExpensesPageState extends State<AllExpensesPage> {
         appBar: AppBarWidget.withTitle("Tüm Giderler "),
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.indigo,
-          child: Icon(Icons.add_circle_outline , ),
+          child: Icon(
+            Icons.add_circle_outline,
+          ),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AddProcessPage(),
+              ),
+            );
+          },
         ),
         body: Padding(
           padding: EdgeInsets.only(
@@ -37,7 +49,6 @@ class AllExpensesPageState extends State<AllExpensesPage> {
             ),
             child: ListView(),
           ),
-
         ),
       ),
     );

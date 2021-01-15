@@ -144,28 +144,7 @@ class DrawerPageState extends State<DrawerPage> {
                     );
                   },
                 ),
-                ListTile(
-                  leading: CircleAvatar(
-                    child: Icon(
-                      Icons.monetization_on_outlined,
-                      color: Colors.indigo,
-                    ),
-                    backgroundColor: Colors.white,
-                  ),
-                  title: Text("Gelir Ekle"),
-                  trailing: Icon(
-                    Icons.chevron_right,
-                    color: Colors.indigo,
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AddProcessPage(),
-                      ),
-                    );
-                  },
-                ),
+
                 ListTile(
                   leading: CircleAvatar(
                     child: Icon(
@@ -188,28 +167,7 @@ class DrawerPageState extends State<DrawerPage> {
                     );
                   },
                 ),
-                ListTile(
-                  leading: CircleAvatar(
-                    child: Icon(
-                      Icons.money_off_outlined,
-                      color: Colors.indigo,
-                    ),
-                    backgroundColor: Colors.white,
-                  ),
-                  title: Text("Gider Ekle "),
-                  trailing: Icon(
-                    Icons.chevron_right,
-                    color: Colors.indigo,
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AddProcessPage(),
-                      ),
-                    );
-                  },
-                ),
+
                 Divider(
                   color: Colors.indigo,
                   indent: 20,
