@@ -15,7 +15,6 @@ class AddProcessPageState extends State<AddProcessPage> {
 
   FocusNode _focusNode;
 
-
   int maxLine = 1;
 
   String value;
@@ -29,9 +28,9 @@ class AddProcessPageState extends State<AddProcessPage> {
 
   List<String> accounts = ["Nakit", "Maaş Hesabı", "Kredi Kartı"];
 
-  String chosenProcess = "Gelir" ;
+  String chosenProcess = "Gelir";
 
-  List<String> processes = ["Gelir" , "Gider"] ;
+  List<String> processes = ["Gelir", "Gider"];
 
   @override
   void initState() {
@@ -99,14 +98,19 @@ class AddProcessPageState extends State<AddProcessPage> {
                   child: TextField(
                     keyboardType: TextInputType.number,
                     textInputAction: TextInputAction.next,
+                    cursorColor: Colors.indigo,
                     decoration: InputDecoration(
+                      focusColor: Colors.indigo,
                       icon: Icon(
                         Icons.monetization_on_outlined,
+                        color: Colors.indigo,
                       ),
                       labelText: "İşlem Tutarı",
+                      labelStyle: TextStyle(
+                        color: Colors.indigo,
+                      ),
                       hintText: "İşlem Tutarını Giriniz",
                     ),
-
                   ),
                 ),
                 Padding(
@@ -122,11 +126,16 @@ class AddProcessPageState extends State<AddProcessPage> {
                     maxLengthEnforced: true,
                     autofocus: false,
                     focusNode: _focusNode,
+                    cursorColor: Colors.indigo,
                     decoration: InputDecoration(
                       icon: Icon(
                         Icons.info_outline_rounded,
+                        color: Colors.indigo,
                       ),
                       labelText: "Detay ",
+                      labelStyle: TextStyle(
+                        color: Colors.indigo,
+                      ),
                       hintText: "İşlem Detaylarını Giriniz",
                     ),
                   ),
@@ -142,6 +151,10 @@ class AddProcessPageState extends State<AddProcessPage> {
                         children: <Widget>[
                           Text(
                             "Kategori Seçimi ",
+                            style: TextStyle(
+                              color: Colors.indigo,
+                              fontSize: 16,
+                            ),
                           ),
                           DropdownButton<String>(
                             items: categories.map((chosenCategory) {
@@ -170,6 +183,10 @@ class AddProcessPageState extends State<AddProcessPage> {
                         children: <Widget>[
                           Text(
                             "Hesap Seçimi",
+                            style: TextStyle(
+                              color: Colors.indigo,
+                              fontSize: 16,
+                            ),
                           ),
                           DropdownButton<String>(
                             items: accounts.map((chosenAccount) {
@@ -192,15 +209,19 @@ class AddProcessPageState extends State<AddProcessPage> {
                     ),
                   ],
                 ),
-
                 Container(
                   width: 120,
                   height: 90,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-
-                      Text("İşlem Seçimi") ,
+                      Text(
+                        "İşlem Seçimi",
+                        style: TextStyle(
+                          color: Colors.indigo,
+                          fontSize: 16,
+                        ),
+                      ),
                       DropdownButton<String>(
                         items: processes.map((chosenProcess) {
                           return DropdownMenuItem<String>(
