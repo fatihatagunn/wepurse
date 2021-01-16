@@ -17,9 +17,9 @@ class AddCategoryPageState extends State<AddCategoryPage> {
 
 //  Icon chosenIcon = Icon(Icons.account_balance_wallet_outlined);
 
- // List<Icon> icons = [
-   // Icon(Icons.icecream),
-    //Icon(Icons.account_balance_wallet_outlined)
+  // List<Icon> icons = [
+  // Icon(Icons.icecream),
+  //Icon(Icons.account_balance_wallet_outlined)
   //];
 
   @override
@@ -74,56 +74,50 @@ class AddCategoryPageState extends State<AddCategoryPage> {
                     decoration: InputDecoration(
                       icon: Icon(
                         Icons.category_outlined,
+                        color: Colors.indigo,
                       ),
                       labelText: "Kategori Adı",
+                      labelStyle: TextStyle(
+                        color: Colors.indigo,
+                      ),
                       hintText: "Kategori Adını Giriniz",
                     ),
                   ),
                 ),
-                Row(
-                  children: <Widget>[
-                    Container(
-                      width: 150,
-                      height: 150,
-                      
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text("İşlem Seçimi"),
-                          DropdownButton<String>(
-                            items: processes.map((chosenProcess) {
-                              return DropdownMenuItem<String>(
-                                child: Text(
-                                  chosenProcess,
-                                ),
-                                value: chosenProcess,
-                              );
-                            }).toList(),
-                            onChanged: (chosenData) {
-                              setState(() {
-                                chosenProcess = chosenData;
-                              });
-                            },
-                            value: chosenProcess,
-                          ),
-                        ],
+                SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  width: 150,
+                  height: 150,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        "İşlem Seçimi",
+                        style: TextStyle(
+                          color: Colors.indigo,
+                          fontSize: 16,
+                        ),
                       ),
-                    ),
-                   /* DropdownButton<Icon>(
-                      items: icons.map((chosenIcon) {
-                        return DropdownMenuItem<Icon>(
-                          child: chosenIcon,
-                          value: chosenIcon,
-                        );
-                      }).toList(),
-                      onChanged: (inputData) {
-                        setState(() {
-                          chosenIcon = inputData;
-                        });
-                      },
-                      value: chosenIcon,
-                    ),*/
-                  ],
+                      DropdownButton<String>(
+                        items: processes.map((chosenProcess) {
+                          return DropdownMenuItem<String>(
+                            child: Text(
+                              chosenProcess,
+                            ),
+                            value: chosenProcess,
+                          );
+                        }).toList(),
+                        onChanged: (chosenData) {
+                          setState(() {
+                            chosenProcess = chosenData;
+                          });
+                        },
+                        value: chosenProcess,
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
