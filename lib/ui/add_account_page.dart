@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:wepurseapp/ui/my_home_page.dart';
 import 'appbar_widget.dart';
 
 class AddAccountPage extends StatefulWidget {
@@ -28,52 +29,66 @@ class AddAccountPageState extends State<AddAccountPage> {
   Widget build(BuildContext context) {
     return Material(
       child: Scaffold(
+        backgroundColor: Colors.indigo,
         appBar: AppBarWidget.withTitle("Hesap Ekle/Düzenle"),
-        body: Container(
-          margin: EdgeInsets.all(10.0),
-          decoration: BoxDecoration(
-            color: Colors.indigoAccent,
-            borderRadius: BorderRadius.circular(10),
-
-            //shape: BoxShape.circle,
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(40.0),
-                child: TextField(
-                  maxLength: 20,
-                  maxLengthEnforced: true,
-                  focusNode: _focusNode,
-                  decoration: InputDecoration(
-                    labelText: "Hesap Adını Giriniz",
-                    labelStyle: TextStyle(
-                      color: Colors.white,
-                    ),
-                    icon: Icon(
-                      Icons.edit,
-                      color: Colors.white,
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
         floatingActionButton: FloatingActionButton(
           child: Icon(
             Icons.done_outline_outlined,
             size: 30,
-            color: Colors.indigo,
+            color: Colors.white,
           ),
-          backgroundColor: Colors.white,
-          onPressed: () {},
+          backgroundColor: Colors.indigo,
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MyHomePage(),
+              ),
+            );
+          },
+        ),
+        body: Padding(
+          padding: EdgeInsets.only(
+            left: 10,
+            top: 10,
+            right: 10,
+          ),
+          child: Container(
+            width: double.infinity,
+            height: MediaQuery.of(context).size.height,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(10),
+                topRight: Radius.circular(10),
+              ),
+            ),
+            child: Column(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(
+                    right: 20,
+                    left: 20,
+                    top: 8,
+                    bottom: 5,
+                  ),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      icon: Icon(
+                        Icons.credit_card,
+                        color: Colors.indigo,
+                      ),
+                      labelText: "Hesap Adı",
+                      labelStyle: TextStyle(
+                        color: Colors.indigo,
+                      ),
+                      hintText: "Hesap Adını Giriniz",
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
