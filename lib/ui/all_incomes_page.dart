@@ -1,4 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:wepurseapp/model/gelir_model.dart';
+import 'package:wepurseapp/services/database_helper_service.dart';
+
 import 'appbar_widget.dart';
 
 class AllIncomesPage extends StatefulWidget {
@@ -9,6 +13,8 @@ class AllIncomesPage extends StatefulWidget {
 }
 
 class AllIncomesPageState extends State<AllIncomesPage> {
+  DatabaseHelper _databaseHelper = DatabaseHelper();
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -17,7 +23,10 @@ class AllIncomesPageState extends State<AllIncomesPage> {
         appBar: AppBarWidget.withTitle("Tüm Gelirler "),
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.indigo,
-          child: Icon(Icons.add_circle_outline , ),
+          onPressed: () {},
+          child: Icon(
+            Icons.add_circle_outline,
+          ),
         ),
         body: Padding(
           padding: EdgeInsets.only(
@@ -35,9 +44,35 @@ class AllIncomesPageState extends State<AllIncomesPage> {
                 topRight: Radius.circular(10),
               ),
             ),
-            child: ListView(),
+            child: FutureBuilder<List<GelirModel>>(
+              future: _databaseHelper.gelirleriGetir(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return ListView.builder(
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (context, index) => Container(
+                            width: double.infinity,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Text(snapshot.data[index].gelirTutari
+                                    .toString()),
+                                Text(snapshot.data[index].islemTipi),
+                                Text(snapshot.data[index].gelirTarihi),
+                                Text(snapshot.data[index].gelirAciklamasi),
+                                Text(snapshot.data[index].hesapTipi.toString()),
+                                Text(snapshot.data[index].kategoriTipi
+                                    .toString()),
+                              ],
+                            ),
+                          ));
+                } else
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+              },
+            ),
           ),
-
         ),
       ),
     );

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:wepurseapp/model/user_model.dart';
+import 'package:wepurseapp/services/database_helper_service.dart';
+import 'package:wepurseapp/ui/my_home_page.dart';
+
 import 'appbar_widget.dart';
-import 'my_home_page.dart';
 
 class CreateUserPage extends StatefulWidget {
   @override
@@ -12,6 +15,7 @@ class CreateUserPage extends StatefulWidget {
 class CreateUserPageState extends State<CreateUserPage> {
   String _userName, _userMail;
   bool autoControl = false;
+  DatabaseHelper _databaseHelper = DatabaseHelper();
 
   final formKey = GlobalKey<FormState>();
 
@@ -81,14 +85,6 @@ class CreateUserPageState extends State<CreateUserPage> {
                     color: Colors.indigo,
                     onPressed: () {
                       _inputDataControl();
-                      if (_userName != null && _userMail != null) {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => MyHomePage(),
-                          ),
-                        );
-                      }
                     },
                   ),
                 ],
@@ -103,7 +99,12 @@ class CreateUserPageState extends State<CreateUserPage> {
   void _inputDataControl() {
     if (formKey.currentState.validate()) {
       formKey.currentState.save();
-      // debugPrint(" $_userMail  , $_userName ...");
+      _databaseHelper
+          .kullaniciEkle(UserModel(userName: _userName, userEmail: _userMail))
+          .then((value) {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => MyHomePage()));
+      });
     } else {
       setState(() {
         autoControl = true;

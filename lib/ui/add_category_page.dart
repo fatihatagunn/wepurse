@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:wepurseapp/model/kategori_model.dart';
+import 'package:wepurseapp/services/database_helper_service.dart';
+
 import 'appbar_widget.dart';
-import 'my_home_page.dart';
 
 class AddCategoryPage extends StatefulWidget {
   @override
@@ -15,12 +17,20 @@ class AddCategoryPageState extends State<AddCategoryPage> {
 
   List<String> processes = ["Gelir", "Gider"];
 
-//  Icon chosenIcon = Icon(Icons.account_balance_wallet_outlined);
+  String categoryName;
+  final _formKey = GlobalKey<FormState>();
+  DatabaseHelper _databaseHelper = DatabaseHelper();
 
- // List<Icon> icons = [
-   // Icon(Icons.icecream),
-    //Icon(Icons.account_balance_wallet_outlined)
-  //];
+  showAlertDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Kategori Başarıyla Eklendi"),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,12 +47,15 @@ class AddCategoryPageState extends State<AddCategoryPage> {
             size: 37,
           ),
           onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => MyHomePage(),
-              ),
-            );
+            if (_formKey.currentState.validate()) {
+              _formKey.currentState.save();
+              _databaseHelper
+                  .kategoriEkle(KategoriModel(
+                      kategoriAdi: categoryName, kategoriTipi: chosenProcess))
+                  .then((value) {
+                showAlertDialog(context);
+              });
+            }
           },
         ),
         body: Padding(
@@ -61,71 +74,68 @@ class AddCategoryPageState extends State<AddCategoryPage> {
                 topRight: Radius.circular(10),
               ),
             ),
-            child: Column(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(
-                    right: 20,
-                    left: 20,
-                    top: 8,
-                    bottom: 5,
-                  ),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      icon: Icon(
-                        Icons.category_outlined,
-                      ),
-                      labelText: "Kategori Adı",
-                      hintText: "Kategori Adını Giriniz",
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      right: 20,
+                      left: 20,
+                      top: 8,
+                      bottom: 5,
                     ),
-                  ),
-                ),
-                Row(
-                  children: <Widget>[
-                    Container(
-                      width: 150,
-                      height: 150,
-                      
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text("İşlem Seçimi"),
-                          DropdownButton<String>(
-                            items: processes.map((chosenProcess) {
-                              return DropdownMenuItem<String>(
-                                child: Text(
-                                  chosenProcess,
-                                ),
-                                value: chosenProcess,
-                              );
-                            }).toList(),
-                            onChanged: (chosenData) {
-                              setState(() {
-                                chosenProcess = chosenData;
-                              });
-                            },
-                            value: chosenProcess,
-                          ),
-                        ],
-                      ),
-                    ),
-                   /* DropdownButton<Icon>(
-                      items: icons.map((chosenIcon) {
-                        return DropdownMenuItem<Icon>(
-                          child: chosenIcon,
-                          value: chosenIcon,
-                        );
-                      }).toList(),
-                      onChanged: (inputData) {
-                        setState(() {
-                          chosenIcon = inputData;
-                        });
+                    child: TextFormField(
+                      onSaved: (value) {
+                        categoryName = value;
                       },
-                      value: chosenIcon,
-                    ),*/
-                  ],
-                ),
-              ],
+                      validator: (value) {
+                        if (value.length < 4) {
+                          return "Lütfen en az 4 karakter giriniz ";
+                        } else
+                          return null;
+                      },
+                      decoration: InputDecoration(
+                        icon: Icon(
+                          Icons.category_outlined,
+                        ),
+                        labelText: "Kategori Adı",
+                        hintText: "Kategori Adını Giriniz",
+                      ),
+                    ),
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Container(
+                        width: 150,
+                        height: 150,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text("İşlem Seçimi"),
+                            DropdownButton<String>(
+                              items: processes.map((chosenProcess) {
+                                return DropdownMenuItem<String>(
+                                  child: Text(
+                                    chosenProcess,
+                                  ),
+                                  value: chosenProcess,
+                                );
+                              }).toList(),
+                              onChanged: (chosenData) {
+                                setState(() {
+                                  chosenProcess = chosenData;
+                                });
+                              },
+                              value: chosenProcess,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),

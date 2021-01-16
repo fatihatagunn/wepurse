@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:wepurseapp/model/user_model.dart';
+import 'package:wepurseapp/services/database_helper_service.dart';
+
 import 'accounts_page.dart';
+import 'add_account_page.dart';
+import 'add_category_page.dart';
 import 'all_expenses_page.dart';
 import 'all_incomes_page.dart';
 import 'categories_page.dart';
-import 'add_account_page.dart';
-import 'add_category_page.dart';
-import 'add_process_page.dart';
-import 'appbar_widget.dart';
 import 'settings_page.dart';
 
 class DrawerPage extends StatefulWidget {
@@ -17,24 +18,31 @@ class DrawerPage extends StatefulWidget {
 }
 
 class DrawerPageState extends State<DrawerPage> {
-  String _userName = "wepurse app";
-  String _userMail = "wepurse@app.fl";
+  DatabaseHelper _databaseHelper = DatabaseHelper();
 
   @override
   Widget build(BuildContext context) {
     return Drawer(
       child: Column(
         children: <Widget>[
-          UserAccountsDrawerHeader(
-            accountName: Text(_userName),
-            //KULLANICI GİRİŞİNDEN ALINAN _userName VERİSİ
-            accountEmail: Text(_userMail),
-            //KULLANICI GİRİŞİNDEN ALINAN _userMail VERİSİ
-            currentAccountPicture:
-                Image.asset("assets/images/wallet_tecno.png"),
-            decoration: BoxDecoration(
-              color: Colors.indigo,
-            ),
+          FutureBuilder<List<UserModel>>(
+            future: _databaseHelper.kullaniciyiGetir(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return UserAccountsDrawerHeader(
+                  accountName: Text(snapshot.data[0].userName),
+                  //KULLANICI GİRİŞİNDEN ALINAN _userName VERİSİ
+                  accountEmail: Text(snapshot.data[0].userEmail),
+                  //KULLANICI GİRİŞİNDEN ALINAN _userMail VERİSİ
+                  currentAccountPicture:
+                      Image.asset("assets/images/wallet_tecno.png"),
+                  decoration: BoxDecoration(
+                    color: Colors.indigo,
+                  ),
+                );
+              } else
+                return CircularProgressIndicator();
+            },
           ),
           Expanded(
             child: ListView(
@@ -97,7 +105,12 @@ class DrawerPageState extends State<DrawerPage> {
                     color: Colors.indigo,
                   ),
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => AccountsPage() ,) ,);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AccountsPage(),
+                      ),
+                    );
                   },
                 ),
                 ListTile(
@@ -144,7 +157,6 @@ class DrawerPageState extends State<DrawerPage> {
                     );
                   },
                 ),
-
                 ListTile(
                   leading: CircleAvatar(
                     child: Icon(
@@ -167,7 +179,6 @@ class DrawerPageState extends State<DrawerPage> {
                     );
                   },
                 ),
-
                 Divider(
                   color: Colors.indigo,
                   indent: 20,

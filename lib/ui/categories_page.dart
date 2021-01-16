@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:wepurseapp/model/kategori_model.dart';
+import 'package:wepurseapp/services/database_helper_service.dart';
+
 import 'appbar_widget.dart';
 
 class CategoriesPage extends StatefulWidget {
@@ -9,6 +12,7 @@ class CategoriesPage extends StatefulWidget {
 }
 
 class CategoriesPageState extends State<CategoriesPage> {
+  DatabaseHelper _databaseHelper = DatabaseHelper();
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -16,8 +20,10 @@ class CategoriesPageState extends State<CategoriesPage> {
         backgroundColor: Colors.indigo,
         appBar: AppBarWidget.withTitle("Kategoriler "),
         floatingActionButton: FloatingActionButton(
-           backgroundColor: Colors.indigo,
-          child: Icon(Icons.add_circle_outline , ),
+          backgroundColor: Colors.indigo,
+          child: Icon(
+            Icons.add_circle_outline,
+          ),
         ),
         body: Padding(
           padding: EdgeInsets.only(
@@ -35,9 +41,25 @@ class CategoriesPageState extends State<CategoriesPage> {
                 topRight: Radius.circular(10),
               ),
             ),
-            child: ListView(),
+            child: FutureBuilder<List<KategoriModel>>(
+              future: _databaseHelper.kategorileriGetir(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return ListView.builder(
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (context, index) => Row(
+                            children: [
+                              Text(snapshot.data[index].kategoriAdi),
+                              Text(snapshot.data[index].kategoriTipi),
+                            ],
+                          ));
+                } else
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+              },
+            ),
           ),
-
         ),
       ),
     );

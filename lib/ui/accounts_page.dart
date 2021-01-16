@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:wepurseapp/model/hesap_model.dart';
+import 'package:wepurseapp/services/database_helper_service.dart';
+
 import 'add_account_page.dart';
 import 'appbar_widget.dart';
 
@@ -10,6 +13,8 @@ class AccountsPage extends StatefulWidget {
 }
 
 class AccountsPageState extends State<AccountsPage> {
+  DatabaseHelper _databaseHelper = DatabaseHelper();
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -18,7 +23,9 @@ class AccountsPageState extends State<AccountsPage> {
         appBar: AppBarWidget.withTitle("Hesaplar "),
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.indigo,
-          child: Icon(Icons.add_circle_outline , ),
+          child: Icon(
+            Icons.add_circle_outline,
+          ),
           onPressed: () {
             Navigator.pushReplacement(
               context,
@@ -44,9 +51,24 @@ class AccountsPageState extends State<AccountsPage> {
                 topRight: Radius.circular(10),
               ),
             ),
-            child: ListView(),
+            child: FutureBuilder<List<HesapModel>>(
+              future: _databaseHelper.hesaplariGetir(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return ListView.builder(
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (context, index) => Row(
+                            children: [
+                              Text(snapshot.data[index].hesapAdi),
+                            ],
+                          ));
+                } else
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+              },
+            ),
           ),
-
         ),
       ),
     );

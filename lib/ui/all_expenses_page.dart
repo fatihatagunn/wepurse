@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:wepurseapp/model/gider_model.dart';
+import 'package:wepurseapp/services/database_helper_service.dart';
+
 import 'add_process_page.dart';
 import 'appbar_widget.dart';
-import 'my_home_page.dart';
 
 class AllExpensesPage extends StatefulWidget {
   @override
@@ -11,6 +13,8 @@ class AllExpensesPage extends StatefulWidget {
 }
 
 class AllExpensesPageState extends State<AllExpensesPage> {
+  DatabaseHelper _databaseHelper = DatabaseHelper();
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -47,7 +51,34 @@ class AllExpensesPageState extends State<AllExpensesPage> {
                 topRight: Radius.circular(10),
               ),
             ),
-            child: ListView(),
+            child: FutureBuilder<List<GiderModel>>(
+              future: _databaseHelper.giderleriGetir(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return ListView.builder(
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (context, index) => Container(
+                            width: double.infinity,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Text(snapshot.data[index].gelirTutari
+                                    .toString()),
+                                Text(snapshot.data[index].islemTipi),
+                                Text(snapshot.data[index].gelirTarihi),
+                                Text(snapshot.data[index].gelirAciklamasi),
+                                Text(snapshot.data[index].hesapTipi.toString()),
+                                Text(snapshot.data[index].kategoriTipi
+                                    .toString()),
+                              ],
+                            ),
+                          ));
+                } else
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+              },
+            ),
           ),
         ),
       ),
