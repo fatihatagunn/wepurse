@@ -1,9 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:wepurseapp/ekran_dokunma_klavye_kapanma.dart';
 import 'package:wepurseapp/model/kategori_model.dart';
 import 'package:wepurseapp/services/database_helper_service.dart';
-
-import 'appbar_widget.dart';
 
 class AddCategoryPage extends StatefulWidget {
   @override
@@ -34,11 +33,21 @@ class AddCategoryPageState extends State<AddCategoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: Scaffold(
-        backgroundColor: Colors.indigo,
+    Size size = MediaQuery.of(context).size;
+    return KlavyeninKapanmasi(
+      widget: Scaffold(
+        backgroundColor: Colors.white,
         resizeToAvoidBottomPadding: false,
-        appBar: AppBarWidget.withTitle("Kategori Ekle/Düzenle"),
+        appBar: AppBar(
+          iconTheme: IconThemeData(color: Colors.black),
+          title: Text(
+            "Kategori Ekle/Düzenle",
+            style: TextStyle(color: Colors.black),
+          ),
+          centerTitle: true,
+          backgroundColor: Colors.indigo,
+          elevation: 0,
+        ),
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.indigo,
           child: Icon(
@@ -51,7 +60,10 @@ class AddCategoryPageState extends State<AddCategoryPage> {
               _formKey.currentState.save();
               _databaseHelper
                   .kategoriEkle(KategoriModel(
-                      kategoriAdi: categoryName, processTypeID: chosenProcess == 'Gelir' ? 1 : (chosenProcess == 'Gider' ? 2 : 3)))
+                      kategoriAdi: categoryName,
+                      processTypeID: chosenProcess == 'Gelir'
+                          ? 1
+                          : (chosenProcess == 'Gider' ? 2 : 3)))
                   .then((value) {
                 showAlertDialog(context);
               });
@@ -97,42 +109,40 @@ class AddCategoryPageState extends State<AddCategoryPage> {
                       },
                       decoration: InputDecoration(
                         icon: Icon(
-                          Icons.category_outlined,
+                          Icons.edit,
                         ),
                         labelText: "Kategori Adı",
                         hintText: "Kategori Adını Giriniz",
                       ),
                     ),
                   ),
-                  Row(
-                    children: <Widget>[
-                      Container(
-                        width: 150,
-                        height: 150,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text("İşlem Seçimi"),
-                            DropdownButton<String>(
-                              items: processes.map((chosenProcess) {
-                                return DropdownMenuItem<String>(
-                                  child: Text(
-                                    chosenProcess,
-                                  ),
-                                  value: chosenProcess,
-                                );
-                              }).toList(),
-                              onChanged: (chosenData) {
-                                setState(() {
-                                  chosenProcess = chosenData;
-                                });
-                              },
-                              value: chosenProcess,
-                            ),
-                          ],
+                  Container(
+                    margin: EdgeInsets.only(top: 30),
+                    width: size.width,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Text("İşlem Seçimi : "),
+                        DropdownButtonHideUnderline(
+                          child: DropdownButton<String>(
+                            items: processes.map((chosenProcess) {
+                              return DropdownMenuItem<String>(
+                                child: Text(
+                                  chosenProcess,
+                                ),
+                                value: chosenProcess,
+                              );
+                            }).toList(),
+                            onChanged: (chosenData) {
+                              setState(() {
+                                chosenProcess = chosenData;
+                              });
+                            },
+                            value: chosenProcess,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ],
               ),

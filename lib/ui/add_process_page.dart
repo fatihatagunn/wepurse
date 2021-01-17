@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:wepurseapp/ekran_dokunma_klavye_kapanma.dart';
 import 'package:wepurseapp/model/gelir_model.dart';
 import 'package:wepurseapp/model/gider_model.dart';
 import 'package:wepurseapp/model/hesap_model.dart';
@@ -77,8 +78,8 @@ class AddProcessPageState extends State<AddProcessPage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Material(
-      child: Scaffold(
+    return KlavyeninKapanmasi(
+      widget: Scaffold(
         backgroundColor: Colors.indigo,
         resizeToAvoidBottomPadding: false,
         appBar: AppBarWidget.withTitle("İşlem Ekle/Düzenle"),
@@ -152,101 +153,95 @@ class AddProcessPageState extends State<AddProcessPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      Container(
-                        width: 120,
-                        height: 90,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                              "Kategori Seçimi ",
-                            ),
-                            FutureBuilder<List<KategoriModel>>(
-                              future: _databaseHelper.kategorileriGetir(),
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                  return DropdownButton(
-                                    items: snapshot.data.map((kategori) {
-                                      return DropdownMenuItem(
-                                        child: Text(kategori.kategoriAdi),
-                                        value: kategori.kategoriID,
-                                      );
-                                    }).toList(),
-                                    onChanged: (chosenData) {
-                                      setState(() {
-                                        category = chosenData;
-                                      });
-                                    },
-                                    value: category,
-                                  );
-                                } else
-                                  return CircularProgressIndicator();
-                              },
-                            ),
-                          ],
-                        ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            "Kategori Seçimi ",
+                          ),
+                          FutureBuilder<List<KategoriModel>>(
+                            future: _databaseHelper.kategorileriGetir(),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                return DropdownButton(
+                                  hint: Text(snapshot.data[0].kategoriAdi),
+                                  items: snapshot.data.map((kategori) {
+                                    return DropdownMenuItem(
+                                      child: Text(
+                                        kategori.kategoriAdi,
+                                        style: TextStyle(color: Colors.black),
+                                      ),
+                                      value: kategori.kategoriID,
+                                    );
+                                  }).toList(),
+                                  onChanged: (chosenData) {
+                                    setState(() {
+                                      category = chosenData;
+                                    });
+                                  },
+                                  value: category,
+                                );
+                              } else
+                                return CircularProgressIndicator();
+                            },
+                          ),
+                        ],
                       ),
-                      Container(
-                        width: 120,
-                        height: 90,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                              "Hesap Seçimi",
-                            ),
-                            FutureBuilder<List<HesapModel>>(
-                              future: _databaseHelper.hesaplariGetir(),
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                  return DropdownButton(
-                                    items: snapshot.data.map((hesaplar) {
-                                      return DropdownMenuItem(
-                                        child: Text(hesaplar.hesapAdi),
-                                        value: hesaplar.hesapID,
-                                      );
-                                    }).toList(),
-                                    onChanged: (chosenData) {
-                                      setState(() {
-                                        account = chosenData;
-                                      });
-                                    },
-                                    value: account,
-                                  );
-                                } else
-                                  return CircularProgressIndicator();
-                              },
-                            ),
-                          ],
-                        ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            "Hesap Seçimi",
+                          ),
+                          FutureBuilder<List<HesapModel>>(
+                            future: _databaseHelper.hesaplariGetir(),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                return DropdownButton(
+                                  hint: Text(snapshot.data[0].hesapAdi),
+                                  items: snapshot.data.map((hesaplar) {
+                                    return DropdownMenuItem(
+                                      child: Text(hesaplar.hesapAdi),
+                                      value: hesaplar.hesapID,
+                                    );
+                                  }).toList(),
+                                  onChanged: (chosenData) {
+                                    setState(() {
+                                      account = chosenData;
+                                    });
+                                  },
+                                  value: account,
+                                );
+                              } else
+                                return CircularProgressIndicator();
+                            },
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                  Container(
-                    width: 120,
-                    height: 90,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text("İşlem Seçimi"),
-                        DropdownButton<String>(
-                          items: processes.map((chosenProcess) {
-                            return DropdownMenuItem<String>(
-                              child: Text(
-                                chosenProcess,
-                              ),
-                              value: chosenProcess,
-                            );
-                          }).toList(),
-                          onChanged: (chosenData) {
-                            setState(() {
-                              chosenProcess = chosenData;
-                            });
-                          },
-                          value: chosenProcess,
-                        ),
-                      ],
-                    ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text("İşlem Seçimi"),
+                      DropdownButton<String>(
+                        hint: Text(chosenProcess),
+                        items: processes.map((chosenProcess) {
+                          return DropdownMenuItem<String>(
+                            child: Text(
+                              chosenProcess,
+                            ),
+                            value: chosenProcess,
+                          );
+                        }).toList(),
+                        onChanged: (chosenData) {
+                          setState(() {
+                            chosenProcess = chosenData;
+                          });
+                        },
+                        value: chosenProcess,
+                      ),
+                    ],
                   ),
                   GestureDetector(
                     onTap: () {
@@ -295,23 +290,31 @@ class AddProcessPageState extends State<AddProcessPage> {
           ),
           onPressed: () {
             _formKey.currentState.save();
-            if (chosenProcess == 'Gelir'){
-              _databaseHelper.gelirEkle(GelirModel(
-                  gelirAciklamasi: detay,
-                  gelirTutari: tutar,
-                  gelirTarihi: DateFormat.yMMMd('tr').format(tarih),
-                  categoryID: category,
-                  processTypeID: 1,
-                  accountID: account)).then((value) {});
+            if (chosenProcess == 'Gelir') {
+              _databaseHelper
+                  .gelirEkle(GelirModel(
+                      gelirAciklamasi: detay,
+                      gelirTutari: tutar,
+                      gelirTarihi: DateFormat.yMMMd('tr').format(tarih),
+                      categoryID: category,
+                      processTypeID: 1,
+                      accountID: account))
+                  .then((value) {
+                Navigator.pop(context);
+              });
             } else if (chosenProcess == 'Gider') {
               print('fonksiyon');
-              _databaseHelper.giderEkle(GiderModel(
-                  giderAciklamasi: detay,
-                  giderTutari: tutar,
-                  giderTarihi: DateFormat.yMMMd('tr').format(tarih),
-                  categoryID: category,
-                  processTypeID: 2,
-                  accountID: account)).then((value) {});
+              _databaseHelper
+                  .giderEkle(GiderModel(
+                      giderAciklamasi: detay,
+                      giderTutari: tutar,
+                      giderTarihi: DateFormat.yMMMd('tr').format(tarih),
+                      categoryID: category,
+                      processTypeID: 2,
+                      accountID: account))
+                  .then((value) {
+                Navigator.pop(context);
+              });
             }
           },
         ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wepurseapp/model/user_model.dart';
 import 'package:wepurseapp/services/database_helper_service.dart';
+import 'package:wepurseapp/ui/edit_profile.dart';
 
 import 'accounts_page.dart';
 import 'add_account_page.dart';
@@ -8,7 +9,6 @@ import 'add_category_page.dart';
 import 'all_expenses_page.dart';
 import 'all_incomes_page.dart';
 import 'categories_page.dart';
-import 'settings_page.dart';
 
 class DrawerPage extends StatefulWidget {
   @override
@@ -19,18 +19,47 @@ class DrawerPage extends StatefulWidget {
 
 class DrawerPageState extends State<DrawerPage> {
   DatabaseHelper _databaseHelper = DatabaseHelper();
+  Future kullaniciyiGetir;
+
+  @override
+  void initState() {
+    super.initState();
+    kullaniciyiGetir = _databaseHelper.kullaniciyiGetir();
+  }
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Drawer(
       child: Column(
         children: <Widget>[
           FutureBuilder<List<UserModel>>(
-            future: _databaseHelper.kullaniciyiGetir(),
+            future: kullaniciyiGetir,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return UserAccountsDrawerHeader(
-                  accountName: Text(snapshot.data[0].userName),
+                  accountName: Container(
+                    width: size.width,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(snapshot.data[0].userName),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => EditProfile()));
+                          },
+                          child: Container(
+                            child: Icon(
+                              Icons.edit,
+                              color: Colors.white,
+                            ),
+                            margin: EdgeInsets.only(right: 15),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                   //KULLANICI GİRİŞİNDEN ALINAN _userName VERİSİ
                   accountEmail: Text(snapshot.data[0].userEmail),
                   //KULLANICI GİRİŞİNDEN ALINAN _userMail VERİSİ
@@ -175,33 +204,6 @@ class DrawerPageState extends State<DrawerPage> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => AllExpensesPage(),
-                      ),
-                    );
-                  },
-                ),
-                Divider(
-                  color: Colors.indigo,
-                  indent: 20,
-                  endIndent: 20,
-                ),
-                ListTile(
-                  leading: CircleAvatar(
-                    child: Icon(
-                      Icons.settings_applications_outlined,
-                      color: Colors.indigo,
-                    ),
-                    backgroundColor: Colors.white,
-                  ),
-                  title: Text("Ayarlar"),
-                  trailing: Icon(
-                    Icons.chevron_right,
-                    color: Colors.indigo,
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SettingsPage(),
                       ),
                     );
                   },

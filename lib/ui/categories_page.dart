@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wepurseapp/model/kategori_model.dart';
 import 'package:wepurseapp/services/database_helper_service.dart';
 import 'package:wepurseapp/ui/add_category_page.dart';
-
-import 'appbar_widget.dart';
+import 'package:wepurseapp/ui/appbar_widget.dart';
 
 class CategoriesPage extends StatefulWidget {
   @override
@@ -14,12 +13,13 @@ class CategoriesPage extends StatefulWidget {
 
 class CategoriesPageState extends State<CategoriesPage> {
   DatabaseHelper _databaseHelper = DatabaseHelper();
+
   @override
   Widget build(BuildContext context) {
     return Material(
       child: Scaffold(
         backgroundColor: Colors.indigo,
-        appBar: AppBarWidget.withTitle("Kategoriler "),
+        appBar: AppBarWidget.withTitle("Kategoriler"),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             Navigator.push(
@@ -29,9 +29,9 @@ class CategoriesPageState extends State<CategoriesPage> {
               ),
             );
           },
-          backgroundColor: Colors.indigo,
+          backgroundColor: Colors.grey.shade700,
           child: Icon(
-            Icons.add_circle_outline,
+            Icons.add,
           ),
         ),
         body: Padding(
@@ -58,14 +58,28 @@ class CategoriesPageState extends State<CategoriesPage> {
                       itemCount: snapshot.data.length,
                       itemBuilder: (context, index) {
                         return Card(
-                          color: snapshot.data[index].processTypeID == 1 ? Colors.green : (snapshot.data[index].processTypeID == 2 ? Colors.red : Colors.amber),
+                          color: Colors.grey.shade400,
                           child: ListTile(
+                            trailing: GestureDetector(
+                                onTap: () {
+                                  _databaseHelper
+                                      .deleteCategory(
+                                          snapshot.data[index].kategoriID)
+                                      .then((value) {
+                                    setState(() {});
+                                  });
+                                },
+                                child: Icon(Icons.delete)),
                             title: Text(snapshot.data[index].kategoriAdi),
-                            subtitle: Text(snapshot.data[index].processTypeID == 1 ? 'Gelir' : (snapshot.data[index].processTypeID == 2 ? 'Gider' : 'Gider ve Gelir')),
+                            subtitle: Text(
+                                snapshot.data[index].processTypeID == 1
+                                    ? 'Gelir'
+                                    : (snapshot.data[index].processTypeID == 2
+                                        ? 'Gider'
+                                        : 'Gider ve Gelir')),
                           ),
                         );
-                      }
-                  );
+                      });
                 } else
                   return Center(
                     child: CircularProgressIndicator(),

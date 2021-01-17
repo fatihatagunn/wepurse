@@ -1,7 +1,11 @@
 import 'package:flutter/cupertino.dart';
-import 'package:date_format/date_format.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:wepurseapp/model/gelir_model.dart';
+import 'package:wepurseapp/model/gider_model.dart';
+import 'package:wepurseapp/model/hesap_model.dart';
+import 'package:wepurseapp/model/kategori_model.dart';
+import 'package:wepurseapp/services/database_helper_service.dart';
+
 import 'add_process_page.dart';
 import 'appbar_widget.dart';
 import 'drawer_page.dart';
@@ -14,194 +18,272 @@ class MyHomePage extends StatefulWidget {
 }
 
 class MyHomePageState extends State<MyHomePage> {
-  var _income = 1200.0;
-  var _amount = 8000.0;
-  var _expense = 600.0;
+  DatabaseHelper _databaseHelper = DatabaseHelper();
+
+  Future gelirleriGetir;
+
+  @override
+  void initState() {
+    super.initState();
+    gelirleriGetir = _databaseHelper.getTotalIncomes();
+  }
 
   @override
   Widget build(BuildContext context) {
-    DateTime today = DateTime.now();
-    DateTime daysAgo = DateTime(2021, today.month, today.day - 3);
-    DateTime daysAfter = DateTime(2021, today.month, today.day + 3);
-
-    return Material(
-      child: Scaffold(
-        drawer: DrawerPage(),
-        appBar: AppBarWidget(),
-        backgroundColor: Colors.white,
-        floatingActionButton: WillPopScope(
-          onWillPop: () {
-            Navigator.pop(context, false);
-            return Future.value(false);
-          },
-          child: FloatingActionButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AddProcessPage(),
-                ),
-              );
-            },
-            //backgroundColor: Colors.pinkAccent.shade200,
-            child: Icon(
-              Icons.edit_outlined,
-              size: 37,
-              color: Colors.indigo,
+    Size size = MediaQuery.of(context).size;
+    return Scaffold(
+      drawer: DrawerPage(),
+      appBar: AppBarWidget(),
+      backgroundColor: Colors.white,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AddProcessPage(),
             ),
-            elevation: 10,
-            backgroundColor: Colors.white,
-          ),
+          ).then((value) {
+            setState(() {});
+          });
+        },
+        //backgroundColor: Colors.pinkAccent.shade200,
+        child: Icon(
+          Icons.edit_outlined,
+          size: 37,
+          color: Colors.indigo,
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            children: <Widget>[
-              Expanded(
-                child: Container(
-                  width: double.infinity,
-                  height: MediaQuery.of(context).size.height / 3,
-                  decoration: BoxDecoration(
-                    //color: Colors.indigo,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: Container(
-                          margin: EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                            color: Colors.indigo,
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(10),
-                              bottomRight: Radius.circular(10),
-                            ),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              Text(
-                                "Gelir :",
-                              ),
-                              Text(
-                                _income.toString(),
-                              ),
-                            ],
-                          ),
+        elevation: 10,
+        backgroundColor: Colors.white,
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(10.0),
+        child: Column(
+          children: <Widget>[
+            Container(
+              width: double.infinity,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Container(
+                    height: 100,
+                    width: 100,
+                    margin: EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                        color: Colors.lightBlue,
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Text(
+                          "Gelir",
                         ),
-                      ),
-                      VerticalDivider(
-                        color: Colors.black,
-                        indent: 30,
-                        endIndent: 30,
-                      ),
-                      Expanded(
-                        child: Container(
-                          margin: EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                              color: Colors.indigoAccent,
-                              borderRadius: BorderRadius.circular(10)),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              Text(
-                                "Bakiye :",
-                              ),
-                              Text(
-                                _amount.toString(),
-                              ),
-                            ],
-                          ),
+                        FutureBuilder(
+                          future: _databaseHelper.getTotalIncomes(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return Text(snapshot.data.toString());
+                            } else
+                              return Text("0");
+                          },
                         ),
-                      ),
-                      VerticalDivider(
-                        color: Colors.black,
-                        indent: 30,
-                        endIndent: 30,
-                      ),
-                      Expanded(
-                        child: Container(
-                          margin: EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                            color: Colors.indigo,
-                            borderRadius: BorderRadius.only(
-                              topRight: Radius.circular(10),
-                              bottomLeft: Radius.circular(10),
-                            ),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              Text(
-                                "Gider :",
-                              ),
-                              Text(
-                                _expense.toString(),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                flex: 2,
-              ),
-              SizedBox(
-                height: 5,
-              ),
-              Divider(
-                color: Colors.black,
-                indent: 20,
-                endIndent: 20,
-              ),
-              Expanded(
-                child: Container(
-                  width: double.infinity,
-                  height: MediaQuery.of(context).size.height / 10,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.indigoAccent,
-                  ),
-                  padding: EdgeInsets.all(10),
-                  child: RaisedButton(
-                    onPressed: () {
-                      showDatePicker(
-                              context: context,
-                              initialDate: today,
-                              firstDate: daysAgo,
-                              lastDate: daysAfter)
-                          .then((chosenDate) {
-                        today = chosenDate;
-                      });
-                    },
-                    child: Text(
-                      "Tarih Seçimi",
+                      ],
                     ),
                   ),
-                ),
-                flex: 1,
-              ),
-              SizedBox(
-                height: 2,
-              ),
-              Expanded(
-                child: Container(
-                  width: double.infinity,
-                  height: MediaQuery.of(context).size.height / 3,
-                  decoration: BoxDecoration(
-                    color: Colors.indigoAccent,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(10),
-                      topRight: Radius.circular(10),
+                  VerticalDivider(
+                    color: Colors.black,
+                    indent: 30,
+                    endIndent: 30,
+                  ),
+                  Container(
+                    height: 100,
+                    width: 100,
+                    margin: EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                        color: Colors.lightBlue,
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Text(
+                          "Bakiye :",
+                        ),
+                        FutureBuilder(
+                          future: _databaseHelper.getBalances(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return Text(snapshot.data.toString());
+                            } else {
+                              return Text("0");
+                            }
+                          },
+                        )
+                      ],
                     ),
                   ),
-                  child: ListView(),
-                ),
-                flex: 4,
+                  VerticalDivider(
+                    color: Colors.black,
+                    indent: 30,
+                    endIndent: 30,
+                  ),
+                  Container(
+                    height: 100,
+                    width: 100,
+                    margin: EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                        color: Colors.lightBlue,
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Text(
+                          "Gider :",
+                        ),
+                        FutureBuilder(
+                          future: _databaseHelper.getTotalExpenses(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return Text(snapshot.data.toString());
+                            } else {
+                              return Text("0");
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+            FutureBuilder<List<GelirModel>>(
+                future: _databaseHelper.gelirleriGetir(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return ListView.builder(
+                      reverse: true,
+                      shrinkWrap: true,
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (context, index) {
+                        return Card(
+                          color: Colors.grey.shade400,
+                          child: ListTile(
+                            title: Text(snapshot.data[index].gelirAciklamasi +
+                                '  ' +
+                                snapshot.data[index].gelirTarihi),
+                            subtitle: Row(
+                              children: [
+                                FutureBuilder<HesapModel>(
+                                  future: _databaseHelper.getAccount(
+                                      accountID:
+                                          snapshot.data[index].accountID),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasData) {
+                                      return Text(snapshot.data.hesapAdi);
+                                    } else
+                                      return Center(
+                                        child: CircularProgressIndicator(),
+                                      );
+                                  },
+                                ),
+                                Text('  '),
+                                FutureBuilder<KategoriModel>(
+                                  future: _databaseHelper.getCategory(
+                                      categoryID:
+                                          snapshot.data[index].categoryID),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasData) {
+                                      return Text(
+                                          '(${snapshot.data.kategoriAdi})');
+                                    } else
+                                      return Center(
+                                        child: CircularProgressIndicator(),
+                                      );
+                                  },
+                                ),
+                              ],
+                            ),
+                            trailing: Text(
+                              snapshot.data[index].gelirTutari.toString() +
+                                  ' TL',
+                              style: TextStyle(
+                                fontSize: 22.0,
+                                color: Colors.green,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  } else
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                }),
+            FutureBuilder<List<GiderModel>>(
+                future: _databaseHelper.giderleriGetir(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return ListView.builder(
+                      reverse: true,
+                      shrinkWrap: true,
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (context, index) {
+                        return Card(
+                          color: Colors.white60,
+                          child: ListTile(
+                            title: Text(snapshot.data[index].giderAciklamasi +
+                                '  ' +
+                                snapshot.data[index].giderTarihi),
+                            subtitle: Row(
+                              children: [
+                                FutureBuilder<HesapModel>(
+                                  future: _databaseHelper.getAccount(
+                                      accountID:
+                                          snapshot.data[index].accountID),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasData) {
+                                      return Text(snapshot.data.hesapAdi);
+                                    } else
+                                      return Center(
+                                        child: CircularProgressIndicator(),
+                                      );
+                                  },
+                                ),
+                                Text('  '),
+                                FutureBuilder<KategoriModel>(
+                                  future: _databaseHelper.getCategory(
+                                      categoryID:
+                                          snapshot.data[index].categoryID),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasData) {
+                                      return Text(
+                                          '(${snapshot.data.kategoriAdi})');
+                                    } else
+                                      return Center(
+                                        child: CircularProgressIndicator(),
+                                      );
+                                  },
+                                ),
+                              ],
+                            ),
+                            trailing: Text(
+                              snapshot.data[index].giderTutari.toString() +
+                                  ' TL',
+                              style: TextStyle(
+                                fontSize: 22.0,
+                                color: Colors.green,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  } else
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                })
+          ],
         ),
       ),
     );

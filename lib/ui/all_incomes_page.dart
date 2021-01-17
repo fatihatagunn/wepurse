@@ -22,6 +22,7 @@ class AllIncomesPageState extends State<AllIncomesPage> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Material(
       child: Scaffold(
         backgroundColor: Colors.indigo,
@@ -56,7 +57,7 @@ class AllIncomesPageState extends State<AllIncomesPage> {
                 topRight: Radius.circular(10),
               ),
             ),
-            child: FutureBuilder<List<GelirModel>> (
+            child: FutureBuilder<List<GelirModel>>(
               future: _databaseHelper.gelirleriGetir(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
@@ -64,44 +65,88 @@ class AllIncomesPageState extends State<AllIncomesPage> {
                   return ListView.builder(
                     itemCount: snapshot.data.length,
                     itemBuilder: (context, index) {
-                      return Card(
-                        color: Colors.white60,
-                        child: ListTile(
-                          title: Text(snapshot.data[length - index - 1].gelirAciklamasi + '  ' + snapshot.data[length - index - 1].gelirTarihi),
-                          subtitle: Row(
-                            children: [
-                              FutureBuilder<HesapModel>(
-                                future: _databaseHelper.getAccount(accountID: snapshot.data[length - index - 1].accountID),
-                                builder: (context, snapshot) {
-                                  if (snapshot.hasData) {
-                                    return Text(snapshot.data.hesapAdi);
-                                  } else
-                                    return Center(
-                                      child: CircularProgressIndicator(),
-                                    );
-                                },
+                      return Container(
+                        width: size.width,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Card(
+                                color: Colors.white60,
+                                child: ListTile(
+                                  title: Text(
+                                      snapshot.data[index].gelirAciklamasi +
+                                          '  ' +
+                                          snapshot.data[index].gelirTarihi),
+                                  subtitle: Row(
+                                    children: [
+                                      FutureBuilder<HesapModel>(
+                                        future: _databaseHelper.getAccount(
+                                            accountID:
+                                                snapshot.data[index].accountID),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.hasData) {
+                                            return Text(snapshot.data.hesapAdi);
+                                          } else
+                                            return Center(
+                                              child:
+                                                  CircularProgressIndicator(),
+                                            );
+                                        },
+                                      ),
+                                      Text('  '),
+                                      FutureBuilder<KategoriModel>(
+                                        future: _databaseHelper.getCategory(
+                                            categoryID: snapshot
+                                                .data[index].categoryID),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.hasData) {
+                                            return Text(
+                                                '(${snapshot.data.kategoriAdi})');
+                                          } else
+                                            return Center(
+                                              child:
+                                                  CircularProgressIndicator(),
+                                            );
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                  trailing: Text(
+                                    snapshot.data[index].gelirTutari
+                                            .toString() +
+                                        ' TL',
+                                    style: TextStyle(
+                                      fontSize: 22.0,
+                                      color: Colors.green,
+                                    ),
+                                  ),
+                                ),
                               ),
-                              Text('  '),
-                              FutureBuilder<KategoriModel>(
-                                future: _databaseHelper.getCategory(categoryID: snapshot.data[length - index - 1].categoryID),
-                                builder: (context, snapshot) {
-                                  if (snapshot.hasData) {
-                                    return Text('(${snapshot.data.kategoriAdi})');
-                                  } else
-                                    return Center(
-                                      child: CircularProgressIndicator(),
-                                    );
-                                },
-                              ),
-                            ],
-                          ),
-                          trailing: Text(
-                            snapshot.data[length - index - 1].gelirTutari.toString() + ' TL',
-                            style: TextStyle(
-                              fontSize: 22.0,
-                              color: Colors.green,
                             ),
-                          ),
+                            Container(
+                              width: size.width * 0.14,
+                              alignment: Alignment.center,
+                              child: GestureDetector(
+                                onTap: () {
+                                  _databaseHelper
+                                      .deleteIncome(
+                                          snapshot.data[index].gelirID)
+                                      .then((value) {
+                                    setState(() {});
+                                  });
+                                },
+                                child: Container(
+                                  width: 50,
+                                  height: 50,
+                                  color: Colors.white,
+                                  child: Icon(
+                                    Icons.delete,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
                         ),
                       );
                     },

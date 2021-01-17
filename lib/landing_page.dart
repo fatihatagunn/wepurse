@@ -20,8 +20,10 @@ class _LandingPageState extends State<LandingPage> {
         if (snapshot.hasData) {
           return snapshot.data.isEmpty ? CreateUserPage() : MyHomePage();
         } else
-          return Center(
-            child: CircularProgressIndicator(),
+          return Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
           );
       },
     );

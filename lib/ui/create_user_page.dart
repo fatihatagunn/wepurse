@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wepurseapp/ekran_dokunma_klavye_kapanma.dart';
 import 'package:wepurseapp/model/user_model.dart';
 import 'package:wepurseapp/services/database_helper_service.dart';
 import 'package:wepurseapp/ui/my_home_page.dart';
@@ -14,80 +15,84 @@ class CreateUserPage extends StatefulWidget {
 
 class CreateUserPageState extends State<CreateUserPage> {
   String _userName, _userMail;
-  bool autoControl = false;
   DatabaseHelper _databaseHelper = DatabaseHelper();
 
   final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: Theme(
-        data: Theme.of(context).copyWith(
-          primaryColor: Colors.indigo,
-          hintColor: Colors.black54,
-          accentColor: Colors.indigo,
-          cursorColor: Colors.indigo,
-          errorColor: Colors.red,
-        ),
-        child: Scaffold(
-          resizeToAvoidBottomPadding: false,
-          appBar: AppBarWidget.withTitle("Kullanıcı Oluştur"),
-          body: Padding(
-            padding: EdgeInsets.all(20),
-            child: Form(
-              key: formKey,
-              autovalidate: autoControl,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  TextFormField(
-                    textInputAction: TextInputAction.next,
-                    decoration: InputDecoration(
-                      labelText: "Kullanıcı Adı ",
-                      hintText: "Kullanıcı adınızı giriniz.",
-                      prefixIcon: Icon(
-                        Icons.account_circle_outlined,
+    return KlavyeninKapanmasi(
+      widget: Material(
+        child: Theme(
+          data: Theme.of(context).copyWith(
+            primaryColor: Colors.indigo,
+            hintColor: Colors.black54,
+            accentColor: Colors.indigo,
+            cursorColor: Colors.indigo,
+            errorColor: Colors.red,
+          ),
+          child: Padding(
+            padding:
+            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: Scaffold(
+              resizeToAvoidBottomPadding: false,
+              appBar: AppBarWidget.withTitle("Kullanıcı Oluştur"),
+              body: Padding(
+                padding: EdgeInsets.all(20),
+                child: Form(
+                  key: formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      TextFormField(
+                        textInputAction: TextInputAction.next,
+                        decoration: InputDecoration(
+                          labelText: "Kullanıcı Adı ",
+                          hintText: "Kullanıcı adınızı giriniz.",
+                          prefixIcon: Icon(
+                            Icons.account_circle_outlined,
+                            color: Colors.indigo,
+                          ),
+                          border: OutlineInputBorder(),
+                        ),
+                        validator: _inputNameControl,
+                        onSaved: (inputData) => _userName = inputData,
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      TextFormField(
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: InputDecoration(
+                          labelText: "E-posta",
+                          hintText: "Geçerli bir e-posta giriniz.",
+                          prefixIcon: Icon(
+                            Icons.email_outlined,
+                            color: Colors.indigo,
+                          ),
+                          border: OutlineInputBorder(),
+                        ),
+                        validator: _inputMailControl,
+                        onSaved: (inputData) => _userMail = inputData,
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      RaisedButton(
+                        child: Text(
+                          "Kullanıcı Oluştur",
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
                         color: Colors.indigo,
+                        onPressed: () {
+                          _inputDataControl();
+                        },
                       ),
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: _inputNameControl,
-                    onSaved: (inputData) => _userName = inputData,
+                    ],
                   ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  TextFormField(
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(
-                      labelText: "E-posta",
-                      hintText: "Geçerli bir e-posta giriniz.",
-                      prefixIcon: Icon(
-                        Icons.email_outlined,
-                        color: Colors.indigo,
-                      ),
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: _inputMailControl,
-                    onSaved: (inputData) => _userMail = inputData,
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  RaisedButton(
-                    child: Text(
-                      "Kullanıcı Oluştur",
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                    color: Colors.indigo,
-                    onPressed: () {
-                      _inputDataControl();
-                    },
-                  ),
-                ],
+                ),
               ),
             ),
           ),
@@ -104,10 +109,6 @@ class CreateUserPageState extends State<CreateUserPage> {
           .then((value) {
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) => MyHomePage()));
-      });
-    } else {
-      setState(() {
-        autoControl = true;
       });
     }
   }

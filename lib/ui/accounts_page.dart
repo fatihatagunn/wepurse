@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:wepurseapp/model/hesap_model.dart';
 import 'package:wepurseapp/services/database_helper_service.dart';
+import 'package:wepurseapp/ui/appbar_widget.dart';
 
 import 'add_account_page.dart';
-import 'appbar_widget.dart';
 
 class AccountsPage extends StatefulWidget {
   @override
@@ -17,14 +17,15 @@ class AccountsPageState extends State<AccountsPage> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Material(
       child: Scaffold(
         backgroundColor: Colors.indigo,
-        appBar: AppBarWidget.withTitle("Hesaplar "),
+        appBar: AppBarWidget.withTitle("Hesaplar"),
         floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.indigo,
+          backgroundColor: Colors.grey.shade700,
           child: Icon(
-            Icons.add_circle_outline,
+            Icons.add,
           ),
           onPressed: () {
             Navigator.pushReplacement(
@@ -56,28 +57,67 @@ class AccountsPageState extends State<AccountsPage> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   return ListView.builder(
+                      shrinkWrap: true,
                       itemCount: snapshot.data.length,
                       itemBuilder: (context, index) {
-                        return Card(
-                          color: Colors.amber,
-                          child: ListTile(
-                            title: Text(snapshot.data[index].hesapAdi),
-                            subtitle: Text(
-                              snapshot.data[index].accountTypeID == 1
-                                  ? 'Nakit Para'
-                                  : (snapshot.data[index].accountTypeID == 2
-                                      ? 'Banka Hesabı'
-                                      : 'Kredi Kartı'),
-                            ),
-                            trailing: FutureBuilder<double>(
-                                future: _databaseHelper
-                                    .getBalance(snapshot.data[index].hesapID),
-                                builder: (context, snapshot) {
-                                  return Text(
-                                    '${snapshot.data.toString()} TL',
-                                    style: snapshot.data != null ? TextStyle(fontSize: 22.0, color: snapshot.data < 0.0 ? Colors.red : Colors.green) : TextStyle(),
-                                  );
-                                }),
+                        return Container(
+                          width: size.width,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Card(
+                                  color: Colors.grey.shade400,
+                                  child: ListTile(
+                                    title: Text(snapshot.data[index].hesapAdi),
+                                    subtitle: Text(
+                                      snapshot.data[index].accountTypeID == 1
+                                          ? 'Nakit Para'
+                                          : (snapshot.data[index]
+                                                      .accountTypeID ==
+                                                  2
+                                              ? 'Banka Hesabı'
+                                              : 'Kredi Kartı'),
+                                    ),
+                                    trailing: FutureBuilder<double>(
+                                        future: _databaseHelper.getBalance(
+                                            snapshot.data[index].hesapID),
+                                        builder: (context, snapshot) {
+                                          return Text(
+                                              snapshot.data != null
+                                                  ? '${snapshot.data.toString()} TL'
+                                                  : "0 TL",
+                                              style: TextStyle(
+                                                  fontSize: 22.0,
+                                                  color: Colors.blue,
+                                                  fontWeight: FontWeight.bold));
+                                        }),
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                width: size.width * 0.14,
+                                alignment: Alignment.center,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    _databaseHelper
+                                        .deleteAccount(
+                                            snapshot.data[index].hesapID)
+                                        .then((value) {
+                                      setState(() {});
+                                    });
+                                  },
+                                  child: Container(
+                                    width: 50,
+                                    height: 50,
+                                    color: Colors.white,
+                                    child: Icon(
+                                      Icons.delete,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         );
                       });
