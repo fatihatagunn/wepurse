@@ -1,38 +1,43 @@
 class GelirModel {
   int gelirID;
+  int processTypeID;
   String gelirAciklamasi;
-  int gelirTutari;
+  int accountID;
+  double gelirTutari;
   String gelirTarihi;
-  var kategoriTipi;
-  var islemTipi;
-  var hesapTipi;
+  int categoryID;
 
   GelirModel(
       {this.gelirAciklamasi,
-      this.kategoriTipi,
+      this.categoryID,
       this.gelirTarihi,
       this.gelirTutari,
-      this.hesapTipi,
-      this.islemTipi});
+      this.accountID,
+      this.processTypeID});
 
   GelirModel.fromMap(Map<String, dynamic> map)
       : gelirID = map["gelirID"],
         gelirAciklamasi = map["gelirAciklamasi"],
-        kategoriTipi = map["kategoriTipi"],
+        categoryID = map["categoryID"],
         gelirTutari = map["gelirTutari"],
         gelirTarihi = map["gelirTarihi"],
-        islemTipi = map["islemTipi"],
-        hesapTipi = map["hesapTipi"];
+        processTypeID = map["processTypeID"],
+        accountID = map["accountID"];
 
   Map<String, dynamic> toMap() {
     return {
       "gelirID": gelirID,
-      "kategoriTipi": kategoriTipi,
+      "categoryID": categoryID,
       "gelirTutari": gelirTutari,
       "gelirAciklamasi": gelirAciklamasi,
       "gelirTarihi": gelirTarihi,
-      "hesapTipi": hesapTipi,
-      "islemTipi": islemTipi,
+      "accountID": accountID,
+      "processTypeID": processTypeID,
     };
+  }
+
+  @override
+  String toString() {
+    return 'GelirModel{gelirID: $gelirID, processTypeID: $processTypeID, gelirAciklamasi: $gelirAciklamasi, accountID: $accountID, gelirTutari: $gelirTutari, gelirTarihi: $gelirTarihi, categoryID: $categoryID}';
   }
 }

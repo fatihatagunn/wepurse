@@ -57,11 +57,30 @@ class AccountsPageState extends State<AccountsPage> {
                 if (snapshot.hasData) {
                   return ListView.builder(
                       itemCount: snapshot.data.length,
-                      itemBuilder: (context, index) => Row(
-                            children: [
-                              Text(snapshot.data[index].hesapAdi),
-                            ],
-                          ));
+                      itemBuilder: (context, index) {
+                        return Card(
+                          color: Colors.amber,
+                          child: ListTile(
+                            title: Text(snapshot.data[index].hesapAdi),
+                            subtitle: Text(
+                              snapshot.data[index].accountTypeID == 1
+                                  ? 'Nakit Para'
+                                  : (snapshot.data[index].accountTypeID == 2
+                                      ? 'Banka Hesabı'
+                                      : 'Kredi Kartı'),
+                            ),
+                            trailing: FutureBuilder<double>(
+                                future: _databaseHelper
+                                    .getBalance(snapshot.data[index].hesapID),
+                                builder: (context, snapshot) {
+                                  return Text(
+                                    '${snapshot.data.toString()} TL',
+                                    style: snapshot.data != null ? TextStyle(fontSize: 22.0, color: snapshot.data < 0.0 ? Colors.red : Colors.green) : TextStyle(),
+                                  );
+                                }),
+                          ),
+                        );
+                      });
                 } else
                   return Center(
                     child: CircularProgressIndicator(),

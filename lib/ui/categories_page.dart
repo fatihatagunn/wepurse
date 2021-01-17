@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wepurseapp/model/kategori_model.dart';
 import 'package:wepurseapp/services/database_helper_service.dart';
+import 'package:wepurseapp/ui/add_category_page.dart';
 
 import 'appbar_widget.dart';
 
@@ -20,6 +21,14 @@ class CategoriesPageState extends State<CategoriesPage> {
         backgroundColor: Colors.indigo,
         appBar: AppBarWidget.withTitle("Kategoriler "),
         floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AddCategoryPage(),
+              ),
+            );
+          },
           backgroundColor: Colors.indigo,
           child: Icon(
             Icons.add_circle_outline,
@@ -47,12 +56,16 @@ class CategoriesPageState extends State<CategoriesPage> {
                 if (snapshot.hasData) {
                   return ListView.builder(
                       itemCount: snapshot.data.length,
-                      itemBuilder: (context, index) => Row(
-                            children: [
-                              Text(snapshot.data[index].kategoriAdi),
-                              Text(snapshot.data[index].kategoriTipi),
-                            ],
-                          ));
+                      itemBuilder: (context, index) {
+                        return Card(
+                          color: snapshot.data[index].processTypeID == 1 ? Colors.green : (snapshot.data[index].processTypeID == 2 ? Colors.red : Colors.amber),
+                          child: ListTile(
+                            title: Text(snapshot.data[index].kategoriAdi),
+                            subtitle: Text(snapshot.data[index].processTypeID == 1 ? 'Gelir' : (snapshot.data[index].processTypeID == 2 ? 'Gider' : 'Gider ve Gelir')),
+                          ),
+                        );
+                      }
+                  );
                 } else
                   return Center(
                     child: CircularProgressIndicator(),

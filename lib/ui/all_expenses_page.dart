@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wepurseapp/model/gider_model.dart';
+import 'package:wepurseapp/model/hesap_model.dart';
+import 'package:wepurseapp/model/kategori_model.dart';
 import 'package:wepurseapp/services/database_helper_service.dart';
 
 import 'add_process_page.dart';
@@ -15,12 +17,14 @@ class AllExpensesPage extends StatefulWidget {
 class AllExpensesPageState extends State<AllExpensesPage> {
   DatabaseHelper _databaseHelper = DatabaseHelper();
 
+  int length;
+
   @override
   Widget build(BuildContext context) {
     return Material(
       child: Scaffold(
         backgroundColor: Colors.indigo,
-        appBar: AppBarWidget.withTitle("Tüm Giderler "),
+        appBar: AppBarWidget.withTitle("Tüm Giderler"),
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.indigo,
           child: Icon(
@@ -55,24 +59,52 @@ class AllExpensesPageState extends State<AllExpensesPage> {
               future: _databaseHelper.giderleriGetir(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
+                  length = snapshot.data.length;
                   return ListView.builder(
-                      itemCount: snapshot.data.length,
-                      itemBuilder: (context, index) => Container(
-                            width: double.infinity,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Text(snapshot.data[index].gelirTutari
-                                    .toString()),
-                                Text(snapshot.data[index].islemTipi),
-                                Text(snapshot.data[index].gelirTarihi),
-                                Text(snapshot.data[index].gelirAciklamasi),
-                                Text(snapshot.data[index].hesapTipi.toString()),
-                                Text(snapshot.data[index].kategoriTipi
-                                    .toString()),
-                              ],
+                    itemCount: snapshot.data.length,
+                    itemBuilder: (context, index) {
+                      return Card(
+                        color: Colors.white60,
+                        child: ListTile(
+                          title: Text(snapshot.data[length - index - 1].giderAciklamasi + '  ' + snapshot.data[length - index - 1].giderTarihi),
+                          subtitle: Row(
+                            children: [
+                              FutureBuilder<HesapModel>(
+                                future: _databaseHelper.getAccount(accountID: snapshot.data[length - index - 1].accountID),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    return Text(snapshot.data.hesapAdi);
+                                  } else
+                                    return Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                },
+                              ),
+                              Text('  '),
+                              FutureBuilder<KategoriModel>(
+                                future: _databaseHelper.getCategory(categoryID: snapshot.data[length - index - 1].categoryID),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    return Text('(${snapshot.data.kategoriAdi})');
+                                  } else
+                                    return Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                },
+                              ),
+                            ],
+                          ),
+                          trailing: Text(
+                            snapshot.data[length - index - 1].giderTutari.toString() + ' TL',
+                            style: TextStyle(
+                              fontSize: 22.0,
+                              color: Colors.red,
                             ),
-                          ));
+                          ),
+                        ),
+                      );
+                    },
+                  );
                 } else
                   return Center(
                     child: CircularProgressIndicator(),

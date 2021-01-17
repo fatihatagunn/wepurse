@@ -15,7 +15,7 @@ class AddCategoryPage extends StatefulWidget {
 class AddCategoryPageState extends State<AddCategoryPage> {
   String chosenProcess = "Gelir";
 
-  List<String> processes = ["Gelir", "Gider"];
+  List<String> processes = ["Gelir", "Gider", 'Gelir ve Gider'];
 
   String categoryName;
   final _formKey = GlobalKey<FormState>();
@@ -51,7 +51,7 @@ class AddCategoryPageState extends State<AddCategoryPage> {
               _formKey.currentState.save();
               _databaseHelper
                   .kategoriEkle(KategoriModel(
-                      kategoriAdi: categoryName, kategoriTipi: chosenProcess))
+                      kategoriAdi: categoryName, processTypeID: chosenProcess == 'Gelir' ? 1 : (chosenProcess == 'Gider' ? 2 : 3)))
                   .then((value) {
                 showAlertDialog(context);
               });

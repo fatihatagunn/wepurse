@@ -1,20 +1,25 @@
 class KategoriModel {
   int kategoriID;
   String kategoriAdi;
-  String kategoriTipi;
+  int processTypeID;
 
-  KategoriModel({this.kategoriAdi, this.kategoriTipi});
+  KategoriModel({this.kategoriAdi, this.processTypeID});
 
   KategoriModel.fromMap(Map<String, dynamic> map)
       : kategoriAdi = map["kategoriAdi"],
-        kategoriTipi = map["kategoriTipi"],
+        processTypeID = map["processTypeID"],
         kategoriID = map["kategoriID"];
 
   Map<String, dynamic> toMap() {
     return {
       "kategoriAdi": kategoriAdi,
-      "kategoriTipi": kategoriTipi,
+      "processTypeID": processTypeID,
       "kategoriID": kategoriID,
     };
+  }
+
+  @override
+  String toString() {
+    return 'KategoriModel{kategoriID: $kategoriID, kategoriAdi: $kategoriAdi, processTypeID: $processTypeID}';
   }
 }

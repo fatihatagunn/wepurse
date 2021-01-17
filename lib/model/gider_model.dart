@@ -1,38 +1,43 @@
 class GiderModel {
-  int gelirID;
-  String gelirAciklamasi;
-  int gelirTutari;
-  String gelirTarihi;
-  var kategoriTipi;
-  var islemTipi;
-  var hesapTipi;
+  int giderID;
+  int processTypeID;
+  String giderAciklamasi;
+  int accountID;
+  double giderTutari;
+  String giderTarihi;
+  int categoryID;
 
   GiderModel(
-      {this.gelirAciklamasi,
-      this.kategoriTipi,
-      this.gelirTarihi,
-      this.gelirTutari,
-      this.hesapTipi,
-      this.islemTipi});
+      {this.giderAciklamasi,
+      this.categoryID,
+      this.giderTarihi,
+      this.giderTutari,
+      this.accountID,
+      this.processTypeID});
 
   GiderModel.fromMap(Map<String, dynamic> map)
-      : gelirID = map["gelirID"],
-        gelirAciklamasi = map["gelirAciklamasi"],
-        kategoriTipi = map["kategoriTipi"],
-        gelirTutari = map["gelirTutari"],
-        gelirTarihi = map["gelirTarihi"],
-        islemTipi = map["islemTipi"],
-        hesapTipi = map["hesapTipi"];
+      : giderID = map["giderID"],
+        giderAciklamasi = map["giderAciklamasi"],
+        categoryID = map["categoryID"],
+        giderTutari = map["giderTutari"],
+        giderTarihi = map["giderTarihi"],
+        processTypeID = map["processTypeID"],
+        accountID = map["accountID"];
 
   Map<String, dynamic> toMap() {
     return {
-      "gelirID": gelirID,
-      "kategoriTipi": kategoriTipi,
-      "gelirTutari": gelirTutari,
-      "gelirAciklamasi": gelirAciklamasi,
-      "gelirTarihi": gelirTarihi,
-      "hesapTipi": hesapTipi,
-      "islemTipi": islemTipi,
+      "giderID": giderID,
+      "categoryID": categoryID,
+      "giderTutari": giderTutari,
+      "giderAciklamasi": giderAciklamasi,
+      "giderTarihi": giderTarihi,
+      "accountID": accountID,
+      "processTypeID": processTypeID,
     };
+  }
+
+  @override
+  String toString() {
+    return 'GiderModel{giderID: $giderID, processTypeID: $processTypeID, giderAciklamasi: $giderAciklamasi, accountID: $accountID, giderTutari: $giderTutari, giderTarihi: $giderTarihi, categoryID: $categoryID}';
   }
 }

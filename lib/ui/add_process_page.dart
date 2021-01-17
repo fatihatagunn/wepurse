@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:wepurseapp/model/gelir_model.dart';
+import 'package:wepurseapp/model/gider_model.dart';
 import 'package:wepurseapp/model/hesap_model.dart';
 import 'package:wepurseapp/model/kategori_model.dart';
 import 'package:wepurseapp/services/database_helper_service.dart';
@@ -49,7 +50,7 @@ class AddProcessPageState extends State<AddProcessPage> {
 
   final _formKey = GlobalKey<FormState>();
 
-  int tutar;
+  double tutar;
   String detay;
 
   @override
@@ -110,7 +111,7 @@ class AddProcessPageState extends State<AddProcessPage> {
                     ),
                     child: TextFormField(
                       onSaved: (value) {
-                        tutar = int.parse(value);
+                        tutar = double.parse(value);
                       },
                       keyboardType: TextInputType.number,
                       textInputAction: TextInputAction.next,
@@ -294,13 +295,24 @@ class AddProcessPageState extends State<AddProcessPage> {
           ),
           onPressed: () {
             _formKey.currentState.save();
-            _databaseHelper.gelirEkle(GelirModel(
-                gelirAciklamasi: detay,
-                gelirTutari: tutar,
-                gelirTarihi: DateFormat.yMMMd('tr').format(tarih),
-                kategoriTipi: category,
-                islemTipi: chosenProcess,
-                hesapTipi: account));
+            if (chosenProcess == 'Gelir'){
+              _databaseHelper.gelirEkle(GelirModel(
+                  gelirAciklamasi: detay,
+                  gelirTutari: tutar,
+                  gelirTarihi: DateFormat.yMMMd('tr').format(tarih),
+                  categoryID: category,
+                  processTypeID: 1,
+                  accountID: account)).then((value) {});
+            } else if (chosenProcess == 'Gider') {
+              print('fonksiyon');
+              _databaseHelper.giderEkle(GiderModel(
+                  giderAciklamasi: detay,
+                  giderTutari: tutar,
+                  giderTarihi: DateFormat.yMMMd('tr').format(tarih),
+                  categoryID: category,
+                  processTypeID: 2,
+                  accountID: account)).then((value) {});
+            }
           },
         ),
       ),

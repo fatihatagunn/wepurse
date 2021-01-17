@@ -9,6 +9,7 @@ import 'package:wepurseapp/model/gider_model.dart';
 import 'package:wepurseapp/model/hesap_model.dart';
 import 'package:wepurseapp/model/kategori_model.dart';
 import 'package:wepurseapp/model/user_model.dart';
+import 'package:wepurseapp/model/account_type.dart';
 
 class DatabaseHelper {
   static DatabaseHelper _databasehelper;
@@ -127,7 +128,8 @@ class DatabaseHelper {
     Database db = await _getDatabase();
     List<KategoriModel> kategoriler = [];
     List<Map<String, dynamic>> sonuc = await db.rawQuery(
-        'select kategoriler.kategoriAdi, kategoriler.kategoriID, kategoriler.kategoriTipi from kategoriler');
+        'select kategoriler.kategoriAdi, kategoriler.kategoriID, kategoriler.processTypeID from kategoriler');
+
     for (Map map in sonuc) {
       // verileri getirmek için mapden çeviriyoruz
       kategoriler.add(KategoriModel.fromMap(map));
@@ -139,7 +141,7 @@ class DatabaseHelper {
     Database db = await _getDatabase();
     List<GelirModel> gelirler = [];
     List<Map<String, dynamic>> sonuc = await db.rawQuery(
-        'select gelir.gelirID, gelir.gelirAciklamasi, gelir.gelirTutari, gelir.gelirTarihi, gelir.islemTipi, gelir.kategoriTipi, gelir.hesapTipi from gelir');
+        'select gelir.gelirID, gelir.gelirAciklamasi, gelir.gelirTutari, gelir.gelirTarihi, gelir.processTypeID, gelir.categoryID, gelir.accountID from gelir');
     for (Map map in sonuc) {
       // verileri getirmek için mapden çeviriyoruz
       gelirler.add(GelirModel.fromMap(map));
@@ -151,7 +153,7 @@ class DatabaseHelper {
     Database db = await _getDatabase();
     List<GiderModel> giderler = [];
     List<Map<String, dynamic>> sonuc = await db.rawQuery(
-        'select gider.gelirID, gider.gelirAciklamasi, gider.gelirTutari, gider.gelirTarihi, gider.islemTipi, gider.kategoriTipi, gider.hesapTipi from gider');
+        'select gider.giderID, gider.giderAciklamasi, gider.giderTutari, gider.giderTarihi, gider.processTypeID, gider.categoryID, gider.accountID from gider');
     for (Map map in sonuc) {
       // verileri getirmek için mapden çeviriyoruz
       giderler.add(GiderModel.fromMap(map));
@@ -163,11 +165,70 @@ class DatabaseHelper {
     Database db = await _getDatabase();
     List<HesapModel> hesaplar = [];
     List<Map<String, dynamic>> sonuc = await db
-        .rawQuery('select hesaplar.hesapAdi, hesaplar.hesapID from hesaplar');
+        .rawQuery('select hesaplar.hesapAdi, hesaplar.hesapID, hesaplar.accountTypeID, hesaplar.cutOffDate from hesaplar');
     for (Map map in sonuc) {
       // verileri getirmek için mapden çeviriyoruz
       hesaplar.add(HesapModel.fromMap(map));
     }
     return hesaplar;
+  }
+
+  Future<List<AccountType>> getAccountTypes() async {
+    Database db = await _getDatabase();
+    List<AccountType> types = [];
+    List<Map<String, dynamic>> result = await db.rawQuery('SELECT T.accountTypeID, T.accountTypeName FROM accountTypes AS T');
+    for (Map map in result) {
+      types.add(AccountType.fromMap(map));
+    }
+    return types;
+  }
+
+  Future<HesapModel> getAccount({int accountID}) async {
+    Database db = await _getDatabase();
+    List<Map<String, dynamic>> result = await db.rawQuery('SELECT H.hesapID, H.hesapAdi, H.accountTypeID, H.cutOffDate FROM hesaplar AS H WHERE H.hesapID = $accountID');
+    return HesapModel.fromMap(result[0]);
+  }
+
+  Future<KategoriModel> getCategory({int categoryID}) async {
+    Database db = await _getDatabase();
+    List<Map<String, dynamic>> result = await db.rawQuery('SELECT K.kategoriID, K.kategoriAdi, K.processTypeID FROM kategoriler AS K WHERE K.kategoriID = $categoryID');
+    return KategoriModel.fromMap(result[0]);
+  }
+
+  Future<double> getBalance(int accountID) async {
+    Database db = await _getDatabase();
+    List<Map<String, dynamic>> result1 = await db.rawQuery('SELECT SUM(gelirTutari) AS total FROM gelir WHERE accountID = $accountID');
+    List<Map<String, dynamic>> result2 = await db.rawQuery('SELECT SUM(giderTutari) AS total FROM gider WHERE accountID = $accountID');
+    return result1[0]['total'] - result2[0]['total'];
+  }
+
+  Future<double> getTotalIncomes() async {
+    Database db = await _getDatabase();
+    List<Map<String, dynamic>> result = await db.rawQuery('SELECT SUM(gelirTuteri) AS total FROM gelir');
+    return result[0]['total'];
+  }
+
+  Future<int> deleteIncome(int incomeID) async {
+    Database db = await _getDatabase();
+    int result = await db.rawDelete('DELETE FROM gelir WHERE gelirID = $incomeID');
+    return result;
+  }
+
+  Future<int> deleteExpense(int expenseID) async {
+    Database db = await _getDatabase();
+    int result = await db.rawDelete('DELETE FROM gider WHERE giderID = $expenseID');
+    return result;
+  }
+
+  Future<int> deleteAccount(int accountID) async {
+    Database db = await _getDatabase();
+    int result = await db.rawDelete('DELETE FROM hesaplar WHERE hesapID = $accountID');
+    return result;
+  }
+
+  Future<int> deleteCategory(int categoryID) async {
+    Database db = await _getDatabase();
+    int result = await db.rawDelete('DELETE FROM kategoriler WHERE kategori = $categoryID');
+    return result;
   }
 }
