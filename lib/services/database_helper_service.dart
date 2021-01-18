@@ -217,6 +217,15 @@ class DatabaseHelper {
         'SELECT SUM(gelirTutari) AS total FROM gelir WHERE accountID = $accountID');
     List<Map<String, dynamic>> result2 = await db.rawQuery(
         'SELECT SUM(giderTutari) AS total FROM gider WHERE accountID = $accountID');
+    if (result1[0]['total'] == null && result2[0]['total'] == null) {
+      return 0.0;
+    }
+    if (result1[0]['total'] == null) {
+      return -result2[0]["total"];
+    }
+    if (result2[0]['total'] == null) {
+      return result1[0]["total"];
+    }
     return result1[0]['total'] - result2[0]['total'];
   }
 

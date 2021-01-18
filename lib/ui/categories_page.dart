@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:wepurseapp/model/kategori_model.dart';
 import 'package:wepurseapp/services/database_helper_service.dart';
 import 'package:wepurseapp/ui/add_category_page.dart';
-import 'package:wepurseapp/ui/appbar_widget.dart';
 
 class CategoriesPage extends StatefulWidget {
   @override
@@ -16,78 +15,97 @@ class CategoriesPageState extends State<CategoriesPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: Scaffold(
-        backgroundColor: Colors.indigo,
-        appBar: AppBarWidget.withTitle("Kategoriler"),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => AddCategoryPage(),
-              ),
-            );
-          },
-          backgroundColor: Colors.grey.shade700,
-          child: Icon(
-            Icons.add,
-          ),
-        ),
-        body: Padding(
-          padding: EdgeInsets.only(
-            left: 10,
-            top: 10,
-            right: 10,
-          ),
-          child: Container(
-            width: double.infinity,
-            height: MediaQuery.of(context).size.height,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(10),
-                topRight: Radius.circular(10),
-              ),
-            ),
-            child: FutureBuilder<List<KategoriModel>>(
-              future: _databaseHelper.kategorileriGetir(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return ListView.builder(
-                      itemCount: snapshot.data.length,
-                      itemBuilder: (context, index) {
-                        return Card(
-                          color: Colors.grey.shade400,
-                          child: ListTile(
-                            trailing: GestureDetector(
-                                onTap: () {
-                                  _databaseHelper
-                                      .deleteCategory(
-                                          snapshot.data[index].kategoriID)
-                                      .then((value) {
-                                    setState(() {});
-                                  });
-                                },
-                                child: Icon(Icons.delete)),
-                            title: Text(snapshot.data[index].kategoriAdi),
-                            subtitle: Text(
-                                snapshot.data[index].processTypeID == 1
-                                    ? 'Gelir'
-                                    : (snapshot.data[index].processTypeID == 2
-                                        ? 'Gider'
-                                        : 'Gider ve Gelir')),
-                          ),
-                        );
-                      });
-                } else
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
+    Size size = MediaQuery.of(context).size;
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.black),
+        actions: [
+          GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AddCategoryPage(),
+                  ),
+                );
               },
-            ),
-          ),
+              child: Padding(
+                padding: EdgeInsets.only(right: 20),
+                child: Icon(
+                  Icons.add_circle,
+                  color: Colors.grey.shade600,
+                  size: 30,
+                ),
+              )),
+        ],
+        title: Text(
+          "Kategoriler",
+          style: TextStyle(color: Colors.black),
         ),
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        elevation: 0,
+      ),
+      body: FutureBuilder<List<KategoriModel>>(
+        future: _databaseHelper.kategorileriGetir(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      width: size.width,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Card(
+                              elevation: 4,
+                              color: Colors.white,
+                              child: ListTile(
+                                title: Text(snapshot.data[index].kategoriAdi),
+                                subtitle: Text(
+                                    snapshot.data[index].processTypeID == 1
+                                        ? 'Gelir'
+                                        : (snapshot.data[index].processTypeID ==
+                                                2
+                                            ? 'Gider'
+                                            : 'Gider ve Gelir')),
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              _databaseHelper
+                                  .deleteCategory(
+                                      snapshot.data[index].kategoriID)
+                                  .then((value) {
+                                setState(() {});
+                              });
+                            },
+                            child: Container(
+                              width: size.width * 0.14,
+                              alignment: Alignment.center,
+                              child: Icon(
+                                Icons.delete,
+                                size: 30,
+                                color: Colors.grey.shade700,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
+            );
+          } else
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+        },
       ),
     );
   }

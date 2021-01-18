@@ -3,9 +3,9 @@ import 'package:wepurseapp/model/gider_model.dart';
 import 'package:wepurseapp/model/hesap_model.dart';
 import 'package:wepurseapp/model/kategori_model.dart';
 import 'package:wepurseapp/services/database_helper_service.dart';
+import 'package:wepurseapp/ui/my_home_page.dart';
 
 import 'add_process_page.dart';
-import 'appbar_widget.dart';
 
 class AllExpensesPage extends StatefulWidget {
   @override
@@ -22,45 +22,51 @@ class AllExpensesPageState extends State<AllExpensesPage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Scaffold(
-      backgroundColor: Colors.indigo,
-      appBar: AppBarWidget.withTitle("Tüm Giderler"),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.indigo,
-        child: Icon(
-          Icons.add_circle_outline,
-        ),
-        onPressed: () {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => AddProcessPage(),
-            ),
-          );
-        },
-      ),
-      body: Padding(
-        padding: EdgeInsets.only(
-          left: 10,
-          top: 10,
-          right: 10,
-        ),
-        child: Container(
-          width: double.infinity,
-          height: MediaQuery.of(context).size.height,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(10),
-              topRight: Radius.circular(10),
-            ),
+    return WillPopScope(
+      onWillPop: () {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => MyHomePage()));
+        return Future.value(false);
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          actions: [
+            GestureDetector(
+                onTap: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AddProcessPage(),
+                    ),
+                  );
+                },
+                child: Padding(
+                  padding: EdgeInsets.only(right: 20),
+                  child: Icon(
+                    Icons.add_circle,
+                    color: Colors.grey.shade600,
+                    size: 30,
+                  ),
+                ))
+          ],
+          iconTheme: IconThemeData(color: Colors.black),
+          title: Text(
+            "Tüm Giderler",
+            style: TextStyle(color: Colors.black),
           ),
-          child: FutureBuilder<List<GiderModel>>(
-            future: _databaseHelper.giderleriGetir(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                length = snapshot.data.length;
-                return ListView.builder(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          centerTitle: true,
+        ),
+        body: FutureBuilder<List<GiderModel>>(
+          future: _databaseHelper.giderleriGetir(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              length = snapshot.data.length;
+              return Padding(
+                padding: EdgeInsets.symmetric(horizontal: size.width * 0.03),
+                child: ListView.builder(
                   itemCount: snapshot.data.length,
                   itemBuilder: (context, index) {
                     return Container(
@@ -69,13 +75,16 @@ class AllExpensesPageState extends State<AllExpensesPage> {
                         children: [
                           Expanded(
                             child: Card(
-                              color: Colors.white60,
+                              elevation: 4,
+                              color: Colors.white,
                               child: ListTile(
-                                title: Text(snapshot.data[length - index - 1]
-                                        .giderAciklamasi +
-                                    '  ' +
-                                    snapshot
-                                        .data[length - index - 1].giderTarihi),
+                                title: Text(
+                                  snapshot
+                                      .data[length - index - 1].giderAciklamasi,
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold),
+                                ),
                                 subtitle: Row(
                                   children: [
                                     FutureBuilder<HesapModel>(
@@ -84,10 +93,14 @@ class AllExpensesPageState extends State<AllExpensesPage> {
                                               snapshot.data[index].accountID),
                                       builder: (context, snapshot) {
                                         if (snapshot.hasData) {
-                                          return Text(snapshot.data.hesapAdi);
+                                          return Text(
+                                            snapshot.data.hesapAdi,
+                                            style:
+                                                TextStyle(color: Colors.black),
+                                          );
                                         } else
                                           return Center(
-                                            child: Text("a"),
+                                            child: Text(""),
                                           );
                                       },
                                     ),
@@ -109,14 +122,25 @@ class AllExpensesPageState extends State<AllExpensesPage> {
                                     ),
                                   ],
                                 ),
-                                trailing: Text(
-                                  snapshot.data[length - index - 1].giderTutari
-                                          .toString() +
-                                      ' TL',
-                                  style: TextStyle(
-                                    fontSize: 22.0,
-                                    color: Colors.red,
-                                  ),
+                                trailing: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Text(
+                                      snapshot.data[length - index - 1]
+                                              .giderTutari
+                                              .toString() +
+                                          ' TL',
+                                      style: TextStyle(
+                                        fontSize: 22.0,
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                                    Text(
+                                      snapshot
+                                          .data[length - index - 1].giderTarihi,
+                                    )
+                                  ],
                                 ),
                               ),
                             ),
@@ -132,14 +156,9 @@ class AllExpensesPageState extends State<AllExpensesPage> {
                                   setState(() {});
                                 });
                               },
-                              child: Container(
-                                width: 50,
-                                height: 50,
-                                color: Colors.white,
-                                child: Icon(
-                                  Icons.delete,
-                                  color: Colors.grey,
-                                ),
+                              child: Icon(
+                                Icons.delete,
+                                color: Colors.grey,
                               ),
                             ),
                           ),
@@ -147,13 +166,13 @@ class AllExpensesPageState extends State<AllExpensesPage> {
                       ),
                     );
                   },
-                );
-              } else
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-            },
-          ),
+                ),
+              );
+            } else
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+          },
         ),
       ),
     );

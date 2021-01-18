@@ -41,111 +41,116 @@ class AddCategoryPageState extends State<AddCategoryPage> {
         appBar: AppBar(
           iconTheme: IconThemeData(color: Colors.black),
           title: Text(
-            "Kategori Ekle/Düzenle",
+            "Kategori Ekle",
             style: TextStyle(color: Colors.black),
           ),
           centerTitle: true,
-          backgroundColor: Colors.indigo,
+          backgroundColor: Colors.white,
           elevation: 0,
         ),
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.indigo,
-          child: Icon(
-            Icons.done_outline_outlined,
-            color: Colors.white,
-            size: 37,
-          ),
-          onPressed: () {
-            if (_formKey.currentState.validate()) {
-              _formKey.currentState.save();
-              _databaseHelper
-                  .kategoriEkle(KategoriModel(
-                      kategoriAdi: categoryName,
-                      processTypeID: chosenProcess == 'Gelir'
-                          ? 1
-                          : (chosenProcess == 'Gider' ? 2 : 3)))
-                  .then((value) {
-                showAlertDialog(context);
-              });
-            }
-          },
-        ),
-        body: Padding(
-          padding: EdgeInsets.only(
-            left: 10,
-            top: 10,
-            right: 10,
-          ),
-          child: Container(
-            width: double.infinity,
-            height: MediaQuery.of(context).size.height,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(10),
-                topRight: Radius.circular(10),
-              ),
-            ),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      right: 20,
-                      left: 20,
-                      top: 8,
-                      bottom: 5,
-                    ),
-                    child: TextFormField(
-                      onSaved: (value) {
-                        categoryName = value;
-                      },
-                      validator: (value) {
-                        if (value.length < 4) {
-                          return "Lütfen en az 4 karakter giriniz ";
-                        } else
-                          return null;
-                      },
-                      decoration: InputDecoration(
-                        icon: Icon(
-                          Icons.edit,
-                        ),
-                        labelText: "Kategori Adı",
-                        hintText: "Kategori Adını Giriniz",
+        body: Form(
+          key: _formKey,
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                SizedBox(
+                  height: 16,
+                ),
+                Text("Kategori Adı"),
+                SizedBox(
+                  height: 8,
+                ),
+                TextFormField(
+                  onSaved: (value) {
+                    categoryName = value;
+                  },
+                  validator: (value) {
+                    if (value.length < 4) {
+                      return "Lütfen en az 4 karakter giriniz ";
+                    } else
+                      return null;
+                  },
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      suffixIcon: Icon(
+                        Icons.category,
                       ),
+                      hintText: "Kategori Adını Giriniz",
+                      helperStyle: TextStyle(color: Colors.black)),
+                ),
+                SizedBox(
+                  height: 16,
+                ),
+                Text("İşlem Seçimi"),
+                SizedBox(
+                  height: 8,
+                ),
+                Container(
+                  width: size.width,
+                  padding: EdgeInsets.symmetric(
+                      horizontal: size.width * 0.03,
+                      vertical: size.height * 0.005),
+                  decoration: ShapeDecoration(
+                    shape: RoundedRectangleBorder(
+                      side: BorderSide(width: 0.2, style: BorderStyle.solid),
+                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
                     ),
                   ),
-                  Container(
-                    margin: EdgeInsets.only(top: 30),
-                    width: size.width,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Text("İşlem Seçimi : "),
-                        DropdownButtonHideUnderline(
-                          child: DropdownButton<String>(
-                            items: processes.map((chosenProcess) {
-                              return DropdownMenuItem<String>(
-                                child: Text(
-                                  chosenProcess,
-                                ),
-                                value: chosenProcess,
-                              );
-                            }).toList(),
-                            onChanged: (chosenData) {
-                              setState(() {
-                                chosenProcess = chosenData;
-                              });
-                            },
-                            value: chosenProcess,
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      items: processes.map((chosenProcess) {
+                        return DropdownMenuItem<String>(
+                          child: Text(
+                            chosenProcess,
                           ),
-                        ),
-                      ],
+                          value: chosenProcess,
+                        );
+                      }).toList(),
+                      onChanged: (chosenData) {
+                        setState(() {
+                          chosenProcess = chosenData;
+                        });
+                      },
+                      value: chosenProcess,
                     ),
                   ),
-                ],
-              ),
+                ),
+                SizedBox(
+                  height: 16,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    if (_formKey.currentState.validate()) {
+                      _formKey.currentState.save();
+                      _databaseHelper
+                          .kategoriEkle(KategoriModel(
+                              kategoriAdi: categoryName,
+                              processTypeID: chosenProcess == 'Gelir'
+                                  ? 1
+                                  : (chosenProcess == 'Gider' ? 2 : 3)))
+                          .then((value) {
+                        showAlertDialog(context);
+                      });
+                    }
+                  },
+                  child: Container(
+                    alignment: Alignment.center,
+                    width: size.width,
+                    height: size.height * 0.08,
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 0.2, color: Colors.white),
+                      borderRadius: BorderRadius.circular(10),
+                      color: Color(0xff1565c0),
+                    ),
+                    child: Text(
+                      "Kaydet",
+                      style: TextStyle(fontSize: 18, color: Colors.white),
+                    ),
+                  ),
+                )
+              ],
             ),
           ),
         ),

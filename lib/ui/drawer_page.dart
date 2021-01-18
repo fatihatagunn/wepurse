@@ -38,35 +38,36 @@ class DrawerPageState extends State<DrawerPage> {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return UserAccountsDrawerHeader(
+                  margin: EdgeInsets.only(bottom: 0.0),
                   accountName: Container(
                     width: size.width,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(snapshot.data[0].userName),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => EditProfile()));
-                          },
-                          child: Container(
-                            child: Icon(
-                              Icons.edit,
-                              color: Colors.white,
-                            ),
-                            margin: EdgeInsets.only(right: 15),
-                          ),
-                        ),
-                      ],
-                    ),
+                    child: Text(snapshot.data[0].userName),
                   ),
-                  //KULLANICI GİRİŞİNDEN ALINAN _userName VERİSİ
-                  accountEmail: Text(snapshot.data[0].userEmail),
-                  //KULLANICI GİRİŞİNDEN ALINAN _userMail VERİSİ
-                  currentAccountPicture:
-                      Image.asset("assets/images/wallet_tecno.png"),
+                  accountEmail: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(snapshot.data[0].userEmail),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => EditProfile()));
+                        },
+                        child: Container(
+                          child: Icon(
+                            Icons.edit,
+                            color: Colors.white,
+                          ),
+                          margin: EdgeInsets.only(right: 15),
+                        ),
+                      ),
+                    ],
+                  ),
+                  currentAccountPicture: Image.asset(
+                    "assets/images/wallet_tecno.png",
+                    color: Colors.white,
+                  ),
                   decoration: BoxDecoration(
-                    color: Colors.indigo,
+                    color: Color(0xff1565c0),
                   ),
                 );
               } else
@@ -74,141 +75,146 @@ class DrawerPageState extends State<DrawerPage> {
             },
           ),
           Expanded(
-            child: ListView(
-              children: <Widget>[
-                ListTile(
-                  leading: CircleAvatar(
-                    child: Icon(
-                      Icons.category_outlined,
-                      color: Colors.indigo,
-                    ),
-                    backgroundColor: Colors.white,
-                  ),
-                  title: Text("Kategoriler "),
-                  trailing: Icon(
-                    Icons.chevron_right,
-                    color: Colors.indigo,
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => CategoriesPage(),
+            child: Container(
+              color: Colors.white,
+              child: Column(
+                children: <Widget>[
+                  ListTile(
+                    leading: CircleAvatar(
+                      child: Icon(
+                        Icons.category_outlined,
+                        color: Color(0xff1565c0),
                       ),
-                    );
-                  },
-                ),
-                ListTile(
-                  leading: CircleAvatar(
-                    child: Icon(
-                      Icons.category_outlined,
-                      color: Colors.indigo,
+                      backgroundColor: Colors.white,
                     ),
-                    backgroundColor: Colors.white,
-                  ),
-                  title: Text("Kategori Ekle "),
-                  trailing: Icon(
-                    Icons.chevron_right,
-                    color: Colors.indigo,
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AddCategoryPage(),
-                      ),
-                    );
-                  },
-                ),
-                ListTile(
-                  leading: CircleAvatar(
-                    child: Icon(
-                      Icons.account_balance_wallet_outlined,
-                      color: Colors.indigo,
+                    title: Text("Kategoriler "),
+                    trailing: Icon(
+                      Icons.chevron_right,
+                      color: Color(0xff1565c0),
                     ),
-                    backgroundColor: Colors.white,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CategoriesPage(),
+                        ),
+                      );
+                    },
                   ),
-                  title: Text("Hesaplar"),
-                  trailing: Icon(
-                    Icons.chevron_right,
-                    color: Colors.indigo,
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AccountsPage(),
+                  ListTile(
+                    leading: CircleAvatar(
+                      child: Icon(
+                        Icons.add_circle,
+                        color: Color(0xff1565c0),
                       ),
-                    );
-                  },
-                ),
-                ListTile(
-                  leading: CircleAvatar(
-                    child: Icon(
-                      Icons.account_balance_wallet_outlined,
-                      color: Colors.indigo,
+                      backgroundColor: Colors.white,
                     ),
-                    backgroundColor: Colors.white,
-                  ),
-                  title: Text("Hesap Ekle "),
-                  trailing: Icon(
-                    Icons.chevron_right,
-                    color: Colors.indigo,
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AddAccountPage(),
-                      ),
-                    );
-                  },
-                ),
-                ListTile(
-                  leading: CircleAvatar(
-                    child: Icon(
-                      Icons.monetization_on_outlined,
-                      color: Colors.indigo,
+                    title: Text("Kategori Ekle "),
+                    trailing: Icon(
+                      Icons.chevron_right,
+                      color: Color(0xff1565c0),
                     ),
-                    backgroundColor: Colors.white,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AddCategoryPage(),
+                        ),
+                      );
+                    },
                   ),
-                  title: Text("Tüm Gelirler "),
-                  trailing: Icon(
-                    Icons.chevron_right,
-                    color: Colors.indigo,
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AllIncomesPage(),
+                  ListTile(
+                    leading: CircleAvatar(
+                      child: Icon(
+                        Icons.account_balance_wallet_outlined,
+                        color: Color(0xff1565c0),
                       ),
-                    );
-                  },
-                ),
-                ListTile(
-                  leading: CircleAvatar(
-                    child: Icon(
-                      Icons.money_off_outlined,
-                      color: Colors.indigo,
+                      backgroundColor: Colors.white,
                     ),
-                    backgroundColor: Colors.white,
+                    title: Text("Hesaplar"),
+                    trailing: Icon(
+                      Icons.chevron_right,
+                      color: Color(0xff1565c0),
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AccountsPage(),
+                        ),
+                      );
+                    },
                   ),
-                  title: Text("Tüm Giderler "),
-                  trailing: Icon(
-                    Icons.chevron_right,
-                    color: Colors.indigo,
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AllExpensesPage(),
+                  ListTile(
+                    leading: CircleAvatar(
+                      child: Icon(
+                        Icons.my_library_add,
+                        color: Color(0xff1565c0),
                       ),
-                    );
-                  },
-                ),
-              ],
+                      backgroundColor: Colors.white,
+                    ),
+                    title: Text("Hesap Ekle "),
+                    trailing: Icon(
+                      Icons.chevron_right,
+                      color: Color(0xff1565c0),
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AddAccountPage(),
+                        ),
+                      );
+                    },
+                  ),
+                  ListTile(
+                    leading: CircleAvatar(
+                      child: Icon(
+                        Icons.monetization_on_outlined,
+                        color: Color(0xff1565c0),
+                      ),
+                      backgroundColor: Colors.white,
+                    ),
+                    title: Text("Tüm Gelirler "),
+                    trailing: Icon(
+                      Icons.chevron_right,
+                      color: Color(0xff1565c0),
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AllIncomesPage(),
+                        ),
+                      ).then((value) {
+                        setState(() {});
+                      });
+                    },
+                  ),
+                  ListTile(
+                    leading: CircleAvatar(
+                      child: Icon(
+                        Icons.money_off_outlined,
+                        color: Color(0xff1565c0),
+                      ),
+                      backgroundColor: Colors.white,
+                    ),
+                    title: Text("Tüm Giderler "),
+                    trailing: Icon(
+                      Icons.chevron_right,
+                      color: Color(0xff1565c0),
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AllExpensesPage(),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ],

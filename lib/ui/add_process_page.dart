@@ -12,8 +12,6 @@ import 'package:wepurseapp/model/hesap_model.dart';
 import 'package:wepurseapp/model/kategori_model.dart';
 import 'package:wepurseapp/services/database_helper_service.dart';
 
-import 'appbar_widget.dart';
-
 class AddProcessPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -45,7 +43,7 @@ class AddProcessPageState extends State<AddProcessPage> {
 
   List<String> accounts = ["Nakit", "Maaş Hesabı", "Kredi Kartı"];
 
-  String chosenProcess = "Gelir";
+  String chosenProcess;
 
   List<String> processes = ["Gelir", "Gider"];
 
@@ -80,152 +78,198 @@ class AddProcessPageState extends State<AddProcessPage> {
     Size size = MediaQuery.of(context).size;
     return KlavyeninKapanmasi(
       widget: Scaffold(
-        backgroundColor: Colors.indigo,
+        backgroundColor: Colors.white,
         resizeToAvoidBottomPadding: false,
-        appBar: AppBarWidget.withTitle("İşlem Ekle/Düzenle"),
-        body: Padding(
-          padding: EdgeInsets.only(
-            left: 10,
-            top: 10,
-            right: 10,
+        appBar: AppBar(
+          iconTheme: IconThemeData(color: Colors.black),
+          title: Text(
+            "Gelir/Gider Ekle",
+            style: TextStyle(color: Colors.black),
           ),
-          child: Container(
-            width: double.infinity,
-            height: MediaQuery.of(context).size.height,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(10),
-                topRight: Radius.circular(10),
-              ),
-            ),
-            child: Form(
-              key: _formKey,
+          centerTitle: true,
+          elevation: 0,
+          backgroundColor: Colors.white,
+        ),
+        body: Form(
+          key: _formKey,
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: size.width * 0.05, vertical: size.height * 0.01),
+            child: SingleChildScrollView(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      right: 20,
-                      left: 20,
-                      top: 8,
-                      bottom: 5,
-                    ),
-                    child: TextFormField(
-                      onSaved: (value) {
-                        tutar = double.parse(value);
-                      },
-                      keyboardType: TextInputType.number,
-                      textInputAction: TextInputAction.next,
-                      decoration: InputDecoration(
-                        icon: Icon(
-                          Icons.monetization_on_outlined,
-                        ),
-                        labelText: "İşlem Tutarı",
-                        hintText: "İşlem Tutarını Giriniz",
+                  Text("İşlem Tutarı"),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  TextFormField(
+                    onSaved: (value) {
+                      tutar = double.parse(value);
+                    },
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return "Bu alanı doldurunuz";
+                      } else
+                        return null;
+                    },
+                    keyboardType: TextInputType.number,
+                    textInputAction: TextInputAction.next,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      suffixIcon: Icon(
+                        Icons.monetization_on_outlined,
                       ),
+                      hintText: "İşlem Tutarını Giriniz",
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      right: 20,
-                      left: 20,
-                      top: 8,
-                      bottom: 5,
-                    ),
-                    child: TextFormField(
-                      maxLines: maxLine,
-                      maxLength: 50,
-                      onSaved: (value) {
-                        detay = value;
-                      },
-                      maxLengthEnforced: true,
-                      autofocus: false,
-                      focusNode: _focusNode,
-                      decoration: InputDecoration(
-                        icon: Icon(
-                          Icons.info_outline_rounded,
-                        ),
-                        labelText: "Detay ",
-                        hintText: "İşlem Detaylarını Giriniz",
+                  SizedBox(
+                    height: 16,
+                  ),
+                  Text("Detay"),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  TextFormField(
+                    maxLines: maxLine,
+                    maxLength: 30,
+                    onSaved: (value) {
+                      detay = value;
+                    },
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return "Bu alanı doldurunuz";
+                      } else
+                        return null;
+                    },
+                    maxLengthEnforced: true,
+                    autofocus: false,
+                    focusNode: _focusNode,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      suffixIcon: Icon(
+                        Icons.info_outline_rounded,
                       ),
+                      hintText: "İşlem Detaylarını Giriniz",
                     ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text(
-                            "Kategori Seçimi ",
+                  Text(
+                    "Kategori Seçimi ",
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  FutureBuilder<List<KategoriModel>>(
+                    future: _databaseHelper.kategorileriGetir(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return Container(
+                          width: size.width,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: size.width * 0.03,
                           ),
-                          FutureBuilder<List<KategoriModel>>(
-                            future: _databaseHelper.kategorileriGetir(),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData) {
-                                return DropdownButton(
-                                  hint: Text(snapshot.data[0].kategoriAdi),
-                                  items: snapshot.data.map((kategori) {
-                                    return DropdownMenuItem(
-                                      child: Text(
-                                        kategori.kategoriAdi,
-                                        style: TextStyle(color: Colors.black),
-                                      ),
-                                      value: kategori.kategoriID,
-                                    );
-                                  }).toList(),
-                                  onChanged: (chosenData) {
-                                    setState(() {
-                                      category = chosenData;
-                                    });
-                                  },
-                                  value: category,
+                          decoration: ShapeDecoration(
+                            shape: RoundedRectangleBorder(
+                              side: BorderSide(
+                                  width: 0.2, style: BorderStyle.solid),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(5.0)),
+                            ),
+                          ),
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton(
+                              hint: Text("Lütfen kategori seçiniz"),
+                              items: snapshot.data.map((kategori) {
+                                return DropdownMenuItem(
+                                  child: Text(
+                                    kategori.kategoriAdi,
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                  value: kategori.kategoriID,
                                 );
-                              } else
-                                return CircularProgressIndicator();
-                            },
+                              }).toList(),
+                              onChanged: (chosenData) {
+                                setState(() {
+                                  category = chosenData;
+                                });
+                              },
+                              value: category,
+                            ),
                           ),
-                        ],
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Text(
-                            "Hesap Seçimi",
-                          ),
-                          FutureBuilder<List<HesapModel>>(
-                            future: _databaseHelper.hesaplariGetir(),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData) {
-                                return DropdownButton(
-                                  hint: Text(snapshot.data[0].hesapAdi),
-                                  items: snapshot.data.map((hesaplar) {
-                                    return DropdownMenuItem(
-                                      child: Text(hesaplar.hesapAdi),
-                                      value: hesaplar.hesapID,
-                                    );
-                                  }).toList(),
-                                  onChanged: (chosenData) {
-                                    setState(() {
-                                      account = chosenData;
-                                    });
-                                  },
-                                  value: account,
-                                );
-                              } else
-                                return CircularProgressIndicator();
-                            },
-                          ),
-                        ],
-                      ),
-                    ],
+                        );
+                      } else
+                        return CircularProgressIndicator();
+                    },
                   ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text("İşlem Seçimi"),
-                      DropdownButton<String>(
-                        hint: Text(chosenProcess),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  Text(
+                    "Hesap Seçimi",
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  FutureBuilder<List<HesapModel>>(
+                    future: _databaseHelper.hesaplariGetir(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return Container(
+                          width: size.width,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: size.width * 0.03,
+                          ),
+                          decoration: ShapeDecoration(
+                            shape: RoundedRectangleBorder(
+                              side: BorderSide(
+                                  width: 0.2, style: BorderStyle.solid),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(5.0)),
+                            ),
+                          ),
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton(
+                              hint: Text("Lütfen hesap seçiniz"),
+                              items: snapshot.data.map((hesaplar) {
+                                return DropdownMenuItem(
+                                  child: Text(hesaplar.hesapAdi),
+                                  value: hesaplar.hesapID,
+                                );
+                              }).toList(),
+                              onChanged: (chosenData) {
+                                setState(() {
+                                  account = chosenData;
+                                });
+                              },
+                              value: account,
+                            ),
+                          ),
+                        );
+                      } else
+                        return CircularProgressIndicator();
+                    },
+                  ),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  Text("İşlem Seçimi"),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Container(
+                    width: size.width,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: size.width * 0.03,
+                    ),
+                    decoration: ShapeDecoration(
+                      shape: RoundedRectangleBorder(
+                        side: BorderSide(width: 0.2, style: BorderStyle.solid),
+                        borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                      ),
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                        hint: Text("Lütfen işlem seçiniz"),
                         items: processes.map((chosenProcess) {
                           return DropdownMenuItem<String>(
                             child: Text(
@@ -241,7 +285,14 @@ class AddProcessPageState extends State<AddProcessPage> {
                         },
                         value: chosenProcess,
                       ),
-                    ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  Text("İşlem Tarihi"),
+                  SizedBox(
+                    height: 8,
                   ),
                   GestureDetector(
                     onTap: () {
@@ -249,11 +300,9 @@ class AddProcessPageState extends State<AddProcessPage> {
                     },
                     child: Container(
                       alignment: Alignment.centerLeft,
-                      height: size.height * 0.08,
-                      width: size.width * 0.8,
                       padding: EdgeInsets.symmetric(
                         horizontal: size.width * 0.03,
-                        vertical: size.height * 0.01,
+                        vertical: size.height * 0.02,
                       ),
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -262,11 +311,11 @@ class AddProcessPageState extends State<AddProcessPage> {
                       ),
                       child: tarih == null
                           ? Text(
-                              "Seçiniz",
+                              "Lütfen tarih seçiniz",
                               style: TextStyle(
                                   fontSize: 17,
                                   fontWeight: FontWeight.w100,
-                                  color: Colors.black87),
+                                  color: Colors.grey.shade600),
                             )
                           : Text(
                               DateFormat.yMMMd('tr').format(tarih),
@@ -277,46 +326,70 @@ class AddProcessPageState extends State<AddProcessPage> {
                             ),
                     ),
                   ),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      if (_formKey.currentState.validate()) {
+                        _formKey.currentState.save();
+                        if (category == null ||
+                            account == null ||
+                            chosenProcess == null ||
+                            tarih == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text("Lütfen boş alanları doldurunuz")));
+                        } else {
+                          if (chosenProcess == 'Gelir') {
+                            _databaseHelper
+                                .gelirEkle(GelirModel(
+                                    gelirAciklamasi: detay,
+                                    gelirTutari: tutar,
+                                    gelirTarihi:
+                                        DateFormat.yMMMd('tr').format(tarih),
+                                    categoryID: category,
+                                    processTypeID: 1,
+                                    accountID: account))
+                                .then((value) {
+                              Navigator.pop(context);
+                            });
+                          } else if (chosenProcess == 'Gider') {
+                            print('fonksiyon');
+                            _databaseHelper
+                                .giderEkle(GiderModel(
+                                    giderAciklamasi: detay,
+                                    giderTutari: tutar,
+                                    giderTarihi:
+                                        DateFormat.yMMMd('tr').format(tarih),
+                                    categoryID: category,
+                                    processTypeID: 2,
+                                    accountID: account))
+                                .then((value) {
+                              Navigator.pop(context);
+                            });
+                          }
+                        }
+                      }
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      width: size.width,
+                      height: size.height * 0.08,
+                      decoration: BoxDecoration(
+                        border: Border.all(width: 0.2, color: Colors.white),
+                        borderRadius: BorderRadius.circular(10),
+                        color: Color(0xff1565c0),
+                      ),
+                      child: Text(
+                        "Ekle",
+                        style: TextStyle(fontSize: 22, color: Colors.white),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
           ),
-        ),
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.indigo,
-          child: Icon(
-            Icons.done_outline_outlined,
-            size: 32,
-          ),
-          onPressed: () {
-            _formKey.currentState.save();
-            if (chosenProcess == 'Gelir') {
-              _databaseHelper
-                  .gelirEkle(GelirModel(
-                      gelirAciklamasi: detay,
-                      gelirTutari: tutar,
-                      gelirTarihi: DateFormat.yMMMd('tr').format(tarih),
-                      categoryID: category,
-                      processTypeID: 1,
-                      accountID: account))
-                  .then((value) {
-                Navigator.pop(context);
-              });
-            } else if (chosenProcess == 'Gider') {
-              print('fonksiyon');
-              _databaseHelper
-                  .giderEkle(GiderModel(
-                      giderAciklamasi: detay,
-                      giderTutari: tutar,
-                      giderTarihi: DateFormat.yMMMd('tr').format(tarih),
-                      categoryID: category,
-                      processTypeID: 2,
-                      accountID: account))
-                  .then((value) {
-                Navigator.pop(context);
-              });
-            }
-          },
         ),
       ),
     );
